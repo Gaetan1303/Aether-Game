@@ -29,22 +29,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: $z-modals;
+  z-index: 2000;
 }
 
 .loading-content, .error-content {
   text-align: center;
-  color: $text-light;
+  color: #f5f5f5;
   
   h3 {
     margin-bottom: 16px;
-    color: $primary-color;
+    color: #6c63ff;
     font-size: 24px;
   }
   
   p {
     margin-bottom: 24px;
-    color: $text-muted;
+    color: #b0b8d6;
   }
 }
 
@@ -52,14 +52,14 @@
   width: 50px;
   height: 50px;
   border: 4px solid transparent;
-  border-top: 4px solid $primary-color;
+  border-top: 4px solid #6c63ff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 24px;
 }
 
 .retry-button {
-  @include game-button($danger-color);
+  @include game-button();
   padding: 12px 24px;
   font-size: 16px;
 }
@@ -92,12 +92,12 @@
     height: 64px;
     border-radius: 8px;
     overflow: hidden;
-    border: 2px solid $primary-color;
+    border: 2px solid #6c63ff;
     
     .portrait-placeholder {
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, $primary-color, darken($primary-color, 20%));
+      background: linear-gradient(135deg, #6c63ff, #3a2fa0);
     }
   }
   
@@ -112,16 +112,16 @@
       .bar-fill {
         height: 100%;
         border-radius: 3px;
-        transition: width $transition-normal;
+        transition: width 0.3s;
       }
     }
     
     .health-bar .bar-fill {
-      background: linear-gradient(90deg, darken($danger-color, 10%), $danger-color);
+      background: linear-gradient(90deg, #b71c1c 10%, #e74c3c 100%);
     }
     
     .mana-bar .bar-fill {
-      background: linear-gradient(90deg, darken($info-color, 10%), $info-color);
+      background: linear-gradient(90deg, #1565c0 10%, #2196f3 100%);
     }
   }
 }
@@ -133,7 +133,7 @@
   justify-content: center;
   
   .action-btn {
-    @include game-button($secondary-color);
+    @include game-button();
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -141,7 +141,7 @@
     padding: 12px 16px;
     min-width: 80px;
     border-radius: 8px;
-    transition: all $transition-fast;
+    transition: all 0.2s;
     
     .icon {
       font-size: 20px;
@@ -157,7 +157,7 @@
     
     &:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba($secondary-color, 0.3);
+      box-shadow: 0 4px 12px rgba(136,136,136,0.3);
     }
     
     &:disabled {
@@ -167,10 +167,10 @@
     }
   }
   
-  .move-btn { @include game-button($info-color); }
-  .attack-btn { @include game-button($danger-color); }
-  .skill-btn { @include game-button($warning-color); }
-  .wait-btn { @include game-button($text-muted); }
+  .move-btn { @include game-button(); }
+  .attack-btn { @include game-button(); }
+  .skill-btn { @include game-button(); }
+  .wait-btn { @include game-button(); }
 }
 
 .turn-info {
@@ -187,7 +187,7 @@
     
     .label {
       font-size: 11px;
-      color: $text-muted;
+      color: #b0b8d6;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -195,20 +195,20 @@
     .value {
       font-size: 24px;
       font-weight: bold;
-      color: $primary-color;
+      color: #6c63ff;
     }
   }
   
   .phase-indicator {
     .phase {
       font-size: 12px;
-      color: $warning-color;
+      color: #ffc107;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       padding: 4px 8px;
-      background: rgba($warning-color, 0.1);
+      background: rgba(255,193,7,0.1);
       border-radius: 4px;
-      border: 1px solid rgba($warning-color, 0.3);
+      border: 1px solid rgba(255,193,7,0.3);
     }
   }
 }
@@ -234,11 +234,11 @@
   flex: 0 0 auto;
   
   h4 {
-    color: $text-light;
-    font-size: 14px;
+    color: #f8f8f2;
+    color: #f8f8f2;
     margin-bottom: 12px;
     padding-bottom: 8px;
-    border-bottom: 1px solid $panel-border;
+    border-bottom: 1px solid #444;
   }
   
   .unit-item {
@@ -248,7 +248,7 @@
     padding: 8px;
     border-radius: 4px;
     margin-bottom: 4px;
-    transition: background-color $transition-fast;
+    transition: background-color 0.2s;
     
     &:hover {
       background: rgba(255, 255, 255, 0.05);
@@ -266,7 +266,7 @@
       
       .unit-name {
         font-size: 12px;
-        color: $text-light;
+        color: #f8f8f2;
         font-weight: 600;
         margin-bottom: 4px;
       }
@@ -280,9 +280,9 @@
           
           .fill {
             height: 100%;
-            background: linear-gradient(90deg, darken($danger-color, 10%), $danger-color);
+            background: linear-gradient(90deg, #b22222, #dc3545);
             border-radius: 2px;
-            transition: width $transition-normal;
+            transition: width 0.3s;
           }
         }
       }
@@ -295,11 +295,11 @@
   min-height: 200px;
   
   h4 {
-    color: $text-light;
+    color: #f8f8f2;
     font-size: 14px;
     margin-bottom: 12px;
     padding-bottom: 8px;
-    border-bottom: 1px solid $panel-border;
+    border-bottom: 1px solid #666;
   }
   
   .log-entries {
@@ -308,17 +308,17 @@
     
     .log-entry {
       font-size: 12px;
-      color: $text-muted;
+      color: #b0b0b0;
       padding: 4px 8px;
       border-radius: 3px;
       margin-bottom: 2px;
-      transition: background-color $transition-fast;
+      transition: background-color 0.2s;
       
       &:hover {
         background: rgba(255, 255, 255, 0.05);
       }
     }
-  }
+        color: #f8f8f2;
 }
 
 // Contrôles de la caméra
@@ -330,8 +330,8 @@
   flex-direction: column;
   gap: 4px;
   
-  .camera-btn {
-    @include game-button($panel-border);
+          color: #b0b0b0;
+    @include game-button();
     width: 40px;
     height: 40px;
     padding: 0;
@@ -343,7 +343,7 @@
     justify-content: center;
     
     &:hover {
-      @include game-button($primary-color);
+      @include game-button();
     }
   }
 }
@@ -360,7 +360,7 @@
   opacity: 0.8;
   
   h5 {
-    color: $warning-color;
+    color: #ffc107;
     margin-bottom: 8px;
     font-size: 12px;
     text-transform: uppercase;
@@ -377,12 +377,12 @@
       justify-content: space-between;
       
       .label {
-        color: $text-muted;
+        color: #b0b8d6;
         font-weight: 600;
       }
       
       .value {
-        color: $text-light;
+        color: #f5f5f5;
         font-family: 'Courier New', monospace;
       }
     }
@@ -403,7 +403,7 @@
 @media (max-width: 768px) {
   .side-panel {
     transform: translateX(100%);
-    transition: transform $transition-normal;
+    transition: transform 0.3s;
     
     &.open {
       transform: translateX(0);

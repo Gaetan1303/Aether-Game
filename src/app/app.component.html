@@ -1,77 +1,33 @@
 <div class="game-container">
   <!-- Interface de navigation principale -->
-  <nav class="main-nav" *ngIf="canNavigate()">
-    <div class="nav-left">
-      <h1 class="game-title">{{ title }}</h1>
-      <div class="player-info" *ngIf="playerStats()">
-        <span class="player-level">Niveau {{ playerStats()!.level }}</span>
-        <div class="player-stats">
-          <div class="stat-bar hp">
-            <span class="stat-label">HP</span>
-            <div class="bar">
-              <div class="fill" [style.width.%]="(playerStats()!.hp / playerStats()!.hpMax) * 100"></div>
-            </div>
-            <span class="stat-text">{{ playerStats()!.hp }}/{{ playerStats()!.hpMax }}</span>
-          </div>
-          <div class="stat-bar mp">
-            <span class="stat-label">MP</span>
-            <div class="bar">
-              <div class="fill" [style.width.%]="(playerStats()!.mp / playerStats()!.mpMax) * 100"></div>
-            </div>
-            <span class="stat-text">{{ playerStats()!.mp }}/{{ playerStats()!.mpMax }}</span>
-          </div>
+
+  <!-- Menu principal classique -->
+
+  <div class="main-menu" *ngIf="!gameState().isInGame">
+    <div class="menu-bg"></div>
+    <div class="menu-content">
+      <div class="menu-header">
+        <img src="assets/logo.svg" alt="Logo" class="menu-logo" />
+        <h1 class="menu-title">AETHER ENGINE</h1>
+        <div class="menu-subtitle">~ TACTICAL CHRONICLES ~</div>
+      </div>
+        <div class="menu-buttons">
+          <button routerLink="/nouvelle-partie" class="menu-btn">Nouvelle partie</button>
+          <button routerLink="/charger" class="menu-btn">Charger une partie</button>
+          <button routerLink="/options" class="menu-btn">Options</button>
+          <button routerLink="/credits" class="menu-btn">Crédits</button>
+          <button routerLink="/quitter" class="menu-btn">Quitter</button>
         </div>
+      <div class="menu-footer">
+        <div class="menu-instructions">Utilisez les flèches ou cliquez pour naviguer</div>
+        <div class="menu-version">Version 1.0.0 - © 2025 Aether Engine</div>
       </div>
     </div>
+  </div>
 
-    <div class="nav-center">
-      <div class="nav-buttons">
-        <button 
-          class="nav-button" 
-          [class.active]="gameState().currentScreen === 'combat'"
-          (click)="navigateToScreen('combat')"
-          [disabled]="!canNavigate()">
-          Combat
-        </button>
-        <button 
-          class="nav-button" 
-          [class.active]="gameState().currentScreen === 'character'"
-          (click)="navigateToScreen('character')"
-          [disabled]="!canNavigate()">
-          Personnage
-        </button>
-        <button 
-          class="nav-button" 
-          [class.active]="gameState().currentScreen === 'inventory'"
-          (click)="navigateToScreen('inventory')"
-          [disabled]="!canNavigate()">
-          Inventaire
-        </button>
-        <button 
-          class="nav-button" 
-          [class.active]="gameState().currentScreen === 'world'"
-          (click)="navigateToScreen('world')"
-          [disabled]="!canNavigate()">
-          Monde
-        </button>
-        <button 
-          class="nav-button" 
-          [class.active]="gameState().currentScreen === 'market'"
-          (click)="navigateToScreen('market')"
-          [disabled]="!canNavigate()">
-          Marché
-        </button>
-      </div>
-    </div>
-
-    <div class="nav-right">
-      <div class="gold-display" *ngIf="playerStats()">
-        <span class="gold-amount">{{ playerStats()!.gold | number }} PO</span>
-      </div>
-      <button class="logout-button" (click)="logout()">
-        Déconnexion
-      </button>
-    </div>
+  <!-- Navigation classique du jeu, affichée seulement en jeu -->
+  <nav class="main-nav" *ngIf="canNavigate() && gameState().isInGame">
+    <!-- ...existing code... -->
   </nav>
 
   <!-- Indicateur de chargement global -->

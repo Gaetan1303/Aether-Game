@@ -1,31 +1,29 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/combat', pathMatch: 'full' },
-  { 
-    path: 'combat', 
-    loadComponent: () => import('./features/combat/components/combat-view.component')
-      .then(m => m.CombatViewComponent)
-  },
-  { 
-    path: 'character', 
-    loadComponent: () => import('./features/character/components/character-sheet.component')
-      .then(m => m.CharacterSheetComponent)
-  },
-  { 
-    path: 'inventory', 
-    loadComponent: () => import('./features/inventory/components/inventory-grid.component')
-      .then(m => m.InventoryGridComponent)
-  },
-  { 
-    path: 'world', 
-    loadComponent: () => import('./features/world/components/world-map.component')
-      .then(m => m.WorldMapComponent)
-  },
-  { 
-    path: 'market', 
-    loadComponent: () => import('./features/economy/components/market.component')
-      .then(m => m.MarketComponent)
-  },
-  { path: '**', redirectTo: '/combat' }
+    {
+      path: 'nouvelle-partie',
+      loadComponent: () => import('./features/character/components/character-creation.component')
+        .then(m => m.CharacterCreationComponent)
+    },
+  { path: '', pathMatch: 'full', loadComponent: () => import('./app.component').then(m => m.AppComponent) },
+  // Les autres routes du jeu restent à traduire selon les besoins du projet
+  // Exemple :
+  // {
+  //   path: 'charger',
+  //   loadComponent: () => import('./features/save/components/load-game.component').then(m => m.LoadGameComponent)
+  // },
+  // {
+  //   path: 'options',
+  //   loadComponent: () => import('./features/options/components/options.component').then(m => m.OptionsComponent)
+  // },
+  // {
+  //   path: 'credits',
+  //   loadComponent: () => import('./features/credits/components/credits.component').then(m => m.CreditsComponent)
+  // },
+  // {
+  //   path: 'quitter',
+  //   loadComponent: () => import('./features/exit/components/exit.component').then(m => m.ExitComponent)
+  // },
+  { path: '**', redirectTo: '' }
 ];

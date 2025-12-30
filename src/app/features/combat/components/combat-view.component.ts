@@ -8,7 +8,7 @@ import { AnimationQueueService } from '../services/animation-queue.service';
 import { WebSocketService } from '@core/services/websocket.service';
 import { GameStateService } from '@core/services/game-state.service';
 import { BattleState, createBattleState, createDefaultBattleConfig } from '../models/battle-state.model';
-import { Unit, createUnit } from '../models/unit.model';
+import { Unit, createUnit, Direction } from '../models/unit.model';
 import { CombatEvent } from '../models/combat-event.model';
 import { Position3D } from '../models/position-3d.model';
 import { Subscription } from 'rxjs';
@@ -46,15 +46,9 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
   
   ngOnInit(): void {
     console.log('CombatViewComponent initializing...');
-    
-    // Initialiser l'état du jeu
-    this.gameState.enterGame('player1'); // TODO: Utiliser le vrai ID du joueur
-    
-    // Configuration WebSocket
-    this.setupWebSocketConnection();
-    
-    // Créer un combat de test
-    this.createTestBattle();
+    // Initialisation minimale : pas de connexion WebSocket ni de combat de test par défaut
+    // Pour tester, décommente la ligne suivante :
+    // this.createTestBattle();
   }
   
   async ngAfterViewInit(): Promise<void> {
@@ -227,28 +221,56 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
         name: 'Chevalier',
         teamId: 'player',
         position: { x: 2, y: 3, z: 0 },
-        spriteId: 'unit_sprite'
+        spriteId: 'unit_sprite',
+        stats: {
+          hp: 120, hpMax: 120, mp: 30, mpMax: 30, attack: 25, defense: 18, speed: 12, range: 1, movement: 4, agility: 14, intelligence: 8, faith: 60, brave: 70
+        },
+        job: { id: 'knight', name: 'Chevalier', level: 1, experience: 0, requiredExp: 100, skills: [], statBonuses: {} },
+        equipment: {},
+        facing: Direction.SOUTH,
+        isAlive: true
       }),
       createUnit({
         id: 'player2',
         name: 'Mage',
         teamId: 'player',
         position: { x: 3, y: 2, z: 0 },
-        spriteId: 'unit_sprite'
+        spriteId: 'unit_sprite',
+        stats: {
+          hp: 80, hpMax: 80, mp: 80, mpMax: 80, attack: 10, defense: 10, speed: 10, range: 3, movement: 3, agility: 12, intelligence: 20, faith: 80, brave: 40
+        },
+        job: { id: 'mage', name: 'Mage', level: 1, experience: 0, requiredExp: 100, skills: [], statBonuses: {} },
+        equipment: {},
+        facing: Direction.SOUTH,
+        isAlive: true
       }),
       createUnit({
         id: 'enemy1',
         name: 'Gobelin',
         teamId: 'enemy',
         position: { x: 15, y: 16, z: 0 },
-        spriteId: 'unit_sprite'
+        spriteId: 'unit_sprite',
+        stats: {
+          hp: 60, hpMax: 60, mp: 10, mpMax: 10, attack: 15, defense: 8, speed: 14, range: 1, movement: 5, agility: 16, intelligence: 4, faith: 20, brave: 30
+        },
+        job: { id: 'goblin', name: 'Gobelin', level: 1, experience: 0, requiredExp: 100, skills: [], statBonuses: {} },
+        equipment: {},
+        facing: Direction.SOUTH,
+        isAlive: true
       }),
       createUnit({
         id: 'enemy2',
         name: 'Orc',
         teamId: 'enemy',
         position: { x: 16, y: 15, z: 0 },
-        spriteId: 'unit_sprite'
+        spriteId: 'unit_sprite',
+        stats: {
+          hp: 100, hpMax: 100, mp: 20, mpMax: 20, attack: 30, defense: 15, speed: 8, range: 1, movement: 3, agility: 10, intelligence: 6, faith: 25, brave: 50
+        },
+        job: { id: 'orc', name: 'Orc', level: 1, experience: 0, requiredExp: 100, skills: [], statBonuses: {} },
+        equipment: {},
+        facing: Direction.SOUTH,
+        isAlive: true
       })
     ];
     

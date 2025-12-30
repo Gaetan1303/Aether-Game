@@ -53,4 +53,32 @@ export class AppComponent implements OnInit {
     this.gameStateService.exitGame();
     // TODO: Rediriger vers page de login
   }
+
+  
+    startNewGame(): void {
+      // Lance l'introduction et la création de personnage
+      this.router.navigate(['/character-creation']);
+      // On pourrait aussi initialiser l'état du jeu ici si besoin
+    }
+  
+    continueGame(): void {
+      if (this.playerStats()) {
+        this.gameStateService.enterGame('player1'); // TODO: charger l'ID réel
+        this.router.navigate(['/combat']);
+      }
+    }
+  
+    showOptions(): void {
+      // Placeholder pour une future fenêtre d'options
+      alert('Options à implémenter');
+    }
+  
+    quitGame(): void {
+      // Placeholder pour quitter l'application (fonctionne en desktop, sinon reload)
+      if (window && window.close) {
+        window.close();
+      } else {
+        window.location.reload();
+      }
+    }
 }

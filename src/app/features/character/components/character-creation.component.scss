@@ -1,0 +1,57 @@
+// --- Fond général et centrage ---
+.character-creation-bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(120deg, #23283a 0%, #1a1d2a 100%);
+  background-image: url('/assets/bg-castle.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.4) blur(1px);
+  z-index: 1;
+}
+
+.character-creation-content {
+  position: relative;
+  z-index: 2;
+  width: 600px;
+  max-width: 98vw;
+  margin: 48px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  color: #fff;
+}
+
+.character-creation-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// --- Actions navigation ---
+.step-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  .back-btn, .next-btn {
+    padding: 12px 28px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: #3b82f6;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover:not(:disabled) { background: #2563eb; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+  .back-btn {
+    background: #23283a;
+    color: #b0b8d6;
+    border: 1px solid #3b4260;
+    &:hover:not(:disabled) { background: #1a1d2a; }
+  }
+}

@@ -1,99 +1,64 @@
-@use 'variables' as *;
-@use 'mixins' as *;
-
-.game-container {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-.main-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  @include game-panel;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  z-index: $z-ui + 1;
-  border-radius: 0;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-
-  .nav-left {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-
-    .game-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: $primary-color;
-      text-shadow: 0 0 10px rgba($primary-color, 0.5);
-    }
-
-    .player-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      .player-level {
-        color: $warning-color;
-        font-weight: 600;
-      }
-
-      .player-stats {
-        display: flex;
-        gap: 8px;
-
-        .stat-bar {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 11px;
-
-          .stat-label {
-            min-width: 20px;
-            font-weight: 600;
-          }
-
-          .bar {
-            width: 60px;
-            height: 4px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 2px;
-            overflow: hidden;
-
-            .fill {
-              height: 100%;
-              transition: width $transition-normal;
-              border-radius: 2px;
-            }
-          }
-
-          .stat-text {
-            min-width: 35px;
-            text-align: right;
-            font-size: 10px;
-            color: $text-muted;
-          }
-
-          &.hp .fill {
-            background: linear-gradient(90deg, darken($danger-color, 10%), $danger-color);
-          }
-
-          &.mp .fill {
-            background: linear-gradient(90deg, darken($info-color, 10%), $info-color);
-          }
-        }
-      }
-    }
+          // Mixin bouton générique pour le style du menu principal
+@mixin game-button() {
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  outline: none;
+  &:hover {
+    background: #333;
+    color: #ffd700;
   }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+          // Correction du bloc orphelin : encapsulation dans .stat-block
+          .stat-block {
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+
+            .stat-label {
+              min-width: 20px;
+              font-weight: 600;
+            }
+
+            .bar {
+              width: 60px;
+              height: 4px;
+              background: rgba(0, 0, 0, 0.5);
+              border-radius: 2px;
+              overflow: hidden;
+
+              .fill {
+                height: 100%;
+                transition: width 0.3s;
+                border-radius: 2px;
+              }
+            }
+
+            .stat-text {
+              min-width: 35px;
+              text-align: right;
+              font-size: 10px;
+              color: #b0b8d6;
+            }
+
+            &.hp .fill {
+              background: linear-gradient(90deg, #b71c1c 10%, #e74c3c 100%);
+            }
+
+            &.mp .fill {
+              background: linear-gradient(90deg, #1565c0 10%, #2196f3 100%);
+            }
+
 
   .nav-center {
     flex: 1;
@@ -105,14 +70,14 @@
       gap: 8px;
 
       .nav-button {
-        @include game-button($panel-border);
+        @include game-button();
         padding: 6px 16px;
         font-size: 11px;
         border-radius: 20px;
-        transition: all $transition-fast;
+        transition: all 0.2s;
 
         &.active {
-          @include game-button($primary-color);
+          @include game-button();
         }
 
         &:disabled {
@@ -132,7 +97,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      color: $warning-color;
+      color: #ffc107;
       font-weight: 600;
 
       &::before {
@@ -142,12 +107,11 @@
     }
 
     .logout-button {
-      @include game-button($danger-color);
+      @include game-button();
       font-size: 10px;
       padding: 4px 12px;
     }
   }
-}
 
 .loading-overlay {
   position: fixed;
@@ -160,22 +124,26 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: $z-modals;
+  z-index: 2000;
 
   .loading-spinner {
     width: 40px;
     height: 40px;
     border: 4px solid transparent;
-    border-top: 4px solid $primary-color;
+    border-top: 4px solid #6c63ff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
   }
 
-  p {
-    color: $text-light;
+    color: #f5f5f5;
     font-size: 16px;
   }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .error-banner {
@@ -183,14 +151,14 @@
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
-  background: $danger-color;
+  background: #e74c3c;
   color: white;
   padding: 8px 16px;
   border-radius: 0 0 8px 8px;
   display: flex;
   align-items: center;
   gap: 12px;
-  z-index: $z-modals + 1;
+  z-index: 2001;
 
   button {
     background: none;
@@ -214,6 +182,152 @@
   &.has-nav {
     padding-top: 60px;
     height: calc(100vh - 60px);
+  }
+}
+
+// --- Menu principal wireframe ---
+.main-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #23283a 0%, #1a1d2a 100%);
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow: hidden;
+
+  .menu-bg {
+    position: absolute;
+    inset: 0;
+    background: url('/assets/bg-castle.jpg') center/cover no-repeat;
+    filter: brightness(0.4) blur(1px);
+    z-index: 1;
+  }
+
+          color: #b0b8d6;
+    position: relative;
+    z-index: 2;
+    width: 480px;
+    max-width: 95vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .menu-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    .menu-logo {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 8px;
+    }
+    .menu-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 16px #000a;
+      margin: 0;
+    }
+    .menu-subtitle {
+      font-size: 1.1rem;
+      color: #b0b8d6;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+  }
+
+  .menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 12px;
+
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      font-size: 1.25rem;
+      font-weight: 600;
+      padding: 18px 32px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      background: rgba(30, 36, 56, 0.85);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 16px #0004;
+      outline: none;
+      position: relative;
+
+      &:hover:not(:disabled) {
+        background: rgba(60, 80, 160, 0.95);
+        border-color: #6c63ff;
+      }
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .menu-btn-icon {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+      &.menu-btn-primary .menu-btn-icon.play {
+        background: url('/assets/icons/play.svg') center/contain no-repeat;
+      }
+      &.menu-btn-green .menu-btn-icon.save {
+        background: url('/assets/icons/save.svg') center/contain no-repeat;
+      }
+      &.menu-btn-grey .menu-btn-icon.options {
+        background: url('/assets/icons/settings.svg') center/contain no-repeat;
+      }
+      &.menu-btn-red {
+        background: linear-gradient(90deg, #e74c3c 80%, #ffb347 100%);
+        color: #fff;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 16px #e74c3c44;
+      }
+      &.menu-btn-red .menu-btn-icon.quit {
+        background: url('/assets/icons/exit.svg') center/contain no-repeat;
+      }
+      &.menu-btn-red .menu-btn-arrow {
+        margin-left: auto;
+        width: 28px;
+        height: 28px;
+        background: url('/assets/icons/arrow-right.svg') center/contain no-repeat;
+        display: inline-block;
+      }
+    }
+  }
+
+  .menu-footer {
+    margin-top: 24px;
+    text-align: center;
+    color: #b0b8d6;
+    font-size: 1rem;
+    .menu-instructions {
+      margin-bottom: 4px;
+    }
+    .menu-version {
+      font-size: 0.95rem;
+      opacity: 0.7;
+    }
   }
 }
 

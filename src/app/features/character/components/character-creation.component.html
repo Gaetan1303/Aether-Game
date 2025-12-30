@@ -1,0 +1,70 @@
+
+<div class="character-creation-bg"></div>
+<div class="character-creation-content">
+  <div class="character-creation-header">
+    <a class="back-link" (click)="allerAEtape(1)" *ngIf="etape > 1">&lt; Retour au menu</a>
+    <div class="steps-indicator">
+      <span [class.active]="etape === 1">1</span>
+      <span class="step-sep"></span>
+      <span [class.active]="etape === 2">2</span>
+      <span class="step-sep"></span>
+      <span [class.active]="etape === 3">3</span>
+    </div>
+  </div>
+
+  <div *ngIf="etape === 1" class="step step-name">
+    <h2>Nommez votre héros</h2>
+    <div class="input-card">
+      <label for="hero-name"><span class="icon user"></span> Nom du personnage</label>
+      <input id="hero-name" maxlength="20" [(ngModel)]="nom" placeholder="Entrez un nom..." />
+      <div class="char-count">{{ nom.length }}/20 caractères</div>
+    </div>
+    <button class="next-btn" [disabled]="!nom.trim()" (click)="etapeSuivante()">Suivant →</button>
+  </div>
+
+  <div *ngIf="etape === 2" class="step step-class">
+    <h2>Choisissez votre classe</h2>
+    <div class="class-grid">
+      <div class="class-card" *ngFor="let c of classes" [class.selected]="classeSelectionnee === c.key" (click)="choisirClasse(c.key)">
+        <div class="class-icon" [ngClass]="c.icon"></div>
+        <div class="class-label">{{ c.label }}</div>
+        <div class="class-desc">{{ c.desc }}</div>
+        <div class="class-stats">
+          <div><span>FOR</span> {{ c.stats.FOR }}</div>
+          <div><span>AGI</span> {{ c.stats.AGI }}</div>
+          <div><span>INT</span> {{ c.stats.INT }}</div>
+          <div><span>VIT</span> {{ c.stats.VIT }}</div>
+        </div>
+        <div class="class-check" *ngIf="classeSelectionnee === c.key">✔</div>
+      </div>
+    </div>
+    <div class="step-actions">
+      <button class="back-btn" (click)="etapePrecedente()">← Retour</button>
+      <button class="next-btn" [disabled]="!classeSelectionnee" (click)="etapeSuivante()">Suivant →</button>
+    </div>
+  </div>
+
+  <div *ngIf="etape === 3" class="step step-appearance">
+    <h2>Personnalisez votre apparence</h2>
+    <div class="appearance-card">
+      <div class="avatar-preview">
+        <div class="avatar-icon" [ngClass]="apparenceSelectionnee || 'sword'"></div>
+        <div class="avatar-name">{{ nom || 'Héros' }}</div>
+        <div class="avatar-class">{{ labelClasseCourante }}</div>
+      </div>
+      <div class="appearance-list">
+        <div class="appearance-icon" *ngFor="let a of apparences" [ngClass]="a.icon" [class.selected]="apparenceSelectionnee === a.key" (click)="choisirApparence(a.key)"></div>
+      </div>
+        <div class="base-stats">
+        <div><span>Force</span> {{ statsCourants.FOR }}</div>
+        <div><span>Intelligence</span> {{ statsCourants.INT }}</div>
+        <div><span>Agilité</span> {{ statsCourants.AGI }}</div>
+        <div><span>Vitalité</span> {{ statsCourants.VIT }}</div>
+      </div>
+    </div>
+    <div class="step-actions">
+      <button class="back-btn" (click)="etapePrecedente()">← Retour</button>
+      <button class="next-btn" [disabled]="!apparenceSelectionnee" (click)="commencerAventure()">Commencer l'aventure →</button>
+    </div>
+  </div>
+</div>
