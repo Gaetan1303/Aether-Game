@@ -1,0 +1,67 @@
+// Variables de couleurs principales
+$primary-color: #3498db;
+$secondary-color: #2c3e50;
+$success-color: #27ae60;
+$danger-color: #e74c3c;
+$warning-color: #f39c12;
+$info-color: #8e44ad;
+
+// Couleurs de texte
+$text-light: #ecf0f1;
+$text-dark: #2c3e50;
+$text-muted: #7f8c8d;
+
+// Couleurs de fond
+$bg-primary: #34495e;
+$bg-secondary: #2c3e50;
+$bg-dark: #1a252f;
+
+// Couleurs des panneaux
+$panel-bg: rgba(52, 73, 94, 0.95);
+$panel-border: rgba(236, 240, 241, 0.1);
+$panel-shadow: rgba(0, 0, 0, 0.3);
+
+// Z-index
+$z-ui: 100;
+$z-modals: 200;
+$z-tooltips: 300;
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Bordures et ombres
+$border-radius: 6px;
+$box-shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+$box-shadow-heavy: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Espacements
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// Polices
+$font-family-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+$font-family-mono: 'Courier New', monospace;
+
+// Tailles de police
+$font-size-xs: 10px;
+$font-size-sm: 12px;
+$font-size-base: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-xxl: 24px;
+
+// Line heights
+$line-height-tight: 1.2;
+$line-height-base: 1.4;
+$line-height-relaxed: 1.6;

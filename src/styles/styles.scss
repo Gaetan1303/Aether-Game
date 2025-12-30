@@ -1,0 +1,326 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+/* Reset CSS et styles de base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: $font-family-primary;
+  background: $bg-dark;
+  color: $text-light;
+  overflow: hidden;
+}
+
+body {
+  line-height: $line-height-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Styles pour les éléments de base */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: $line-height-tight;
+}
+
+p {
+  line-height: $line-height-relaxed;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  @include accessible-focus;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  @include accessible-focus;
+}
+
+/* Classes utilitaires */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.d-flex { display: flex; }
+.d-none { display: none; }
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-inline-block { display: inline-block; }
+
+.justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-around { justify-content: space-around; }
+.justify-content-start { justify-content: flex-start; }
+.justify-content-end { justify-content: flex-end; }
+
+.align-items-center { align-items: center; }
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
+.align-items-stretch { align-items: stretch; }
+
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+
+/* Classes de couleurs */
+.text-primary { color: $primary-color; }
+.text-secondary { color: $secondary-color; }
+.text-success { color: $success-color; }
+.text-danger { color: $danger-color; }
+.text-warning { color: $warning-color; }
+.text-info { color: $info-color; }
+.text-light { color: $text-light; }
+.text-muted { color: $text-muted; }
+
+.bg-primary { background-color: $primary-color; }
+.bg-secondary { background-color: $secondary-color; }
+.bg-success { background-color: $success-color; }
+.bg-danger { background-color: $danger-color; }
+.bg-warning { background-color: $warning-color; }
+.bg-info { background-color: $info-color; }
+
+/* Espacements */
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $length in (0: 0, 1: $spacing-xs, 2: $spacing-sm, 3: $spacing-md, 4: $spacing-lg, 5: $spacing-xl) {
+    .#{$abbrev}-#{$size} { #{$prop}: $length !important; }
+    .#{$abbrev}t-#{$size} { #{$prop}-top: $length !important; }
+    .#{$abbrev}r-#{$size} { #{$prop}-right: $length !important; }
+    .#{$abbrev}b-#{$size} { #{$prop}-bottom: $length !important; }
+    .#{$abbrev}l-#{$size} { #{$prop}-left: $length !important; }
+    .#{$abbrev}x-#{$size} {
+      #{$prop}-right: $length !important;
+      #{$prop}-left: $length !important;
+    }
+    .#{$abbrev}y-#{$size} {
+      #{$prop}-top: $length !important;
+      #{$prop}-bottom: $length !important;
+    }
+  }
+}
+
+/* Bordures arrondies */
+.rounded { border-radius: $border-radius; }
+.rounded-sm { border-radius: $border-radius / 2; }
+.rounded-lg { border-radius: $border-radius * 1.5; }
+.rounded-circle { border-radius: 50%; }
+
+/* Ombres */
+.shadow { box-shadow: $box-shadow-light; }
+.shadow-lg { box-shadow: $box-shadow-heavy; }
+
+/* Animations */
+.fade-in { animation: fadeIn 0.3s ease-in-out; }
+.slide-in-up { animation: slideInUp 0.3s ease-in-out; }
+.slide-in-down { animation: slideInDown 0.3s ease-in-out; }
+.scale-in { animation: scaleIn 0.3s ease-in-out; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Scrollbars personnalisées pour tous les éléments scrollables */
+* {
+  @include custom-scrollbar;
+}
+
+/* Classes responsive d'affichage */
+@include respond-to(sm) {
+  .d-sm-none { display: none !important; }
+  .d-sm-block { display: block !important; }
+  .d-sm-flex { display: flex !important; }
+}
+
+@include respond-to(md) {
+  .d-md-none { display: none !important; }
+  .d-md-block { display: block !important; }
+  .d-md-flex { display: flex !important; }
+}
+
+@include respond-to(lg) {
+  .d-lg-none { display: none !important; }
+  .d-lg-block { display: block !important; }
+  .d-lg-flex { display: flex !important; }
+}
+
+/* Styles pour les éléments de formulaire de jeu */
+.form-group {
+  margin-bottom: $spacing-md;
+  
+  label {
+    display: block;
+    margin-bottom: $spacing-xs;
+    font-weight: 600;
+    color: $text-light;
+    font-size: $font-size-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  input, select, textarea {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid $panel-border;
+    border-radius: $border-radius;
+    color: $text-light;
+    font-size: $font-size-base;
+    transition: all $transition-fast;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+    
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+/* Styles pour les messages d'état */
+.alert {
+  padding: $spacing-md;
+  border-radius: $border-radius;
+  margin-bottom: $spacing-md;
+  border: 1px solid transparent;
+  
+  &.alert-success {
+    background: rgba($success-color, 0.1);
+    border-color: rgba($success-color, 0.3);
+    color: lighten($success-color, 20%);
+  }
+  
+  &.alert-danger {
+    background: rgba($danger-color, 0.1);
+    border-color: rgba($danger-color, 0.3);
+    color: lighten($danger-color, 20%);
+  }
+  
+  &.alert-warning {
+    background: rgba($warning-color, 0.1);
+    border-color: rgba($warning-color, 0.3);
+    color: lighten($warning-color, 20%);
+  }
+  
+  &.alert-info {
+    background: rgba($info-color, 0.1);
+    border-color: rgba($info-color, 0.3);
+    color: lighten($info-color, 20%);
+  }
+}
+
+/* Classes d'état pour le chargement */
+.loading {
+  @include loading-state;
+}
+
+/* Styles pour les cartes/panneaux */
+.card {
+  @include game-panel;
+  border-radius: $border-radius;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  
+  .card-header {
+    margin: (-$spacing-lg) (-$spacing-lg) $spacing-md (-$spacing-lg);
+    padding: $spacing-md $spacing-lg;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid $panel-border;
+    
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+      color: $primary-color;
+    }
+  }
+  
+  .card-footer {
+    margin: $spacing-md (-$spacing-lg) (-$spacing-lg) (-$spacing-lg);
+    padding: $spacing-md $spacing-lg;
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid $panel-border;
+  }
+}
+
+/* Utilitaires de position */
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+.position-fixed { position: fixed; }
+
+/* Utilitaires de débordement */
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+
+/* Styles pour les listes */
+.list-unstyled {
+  list-style: none;
+  padding-left: 0;
+}
+
+.list-inline {
+  list-style: none;
+  padding-left: 0;
+  
+  li {
+    display: inline-block;
+    margin-right: $spacing-sm;
+  }
+}

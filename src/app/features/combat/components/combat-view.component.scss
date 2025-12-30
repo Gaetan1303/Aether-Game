@@ -1,0 +1,458 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.combat-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+
+.pixi-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  
+  &.interactive {
+    cursor: crosshair;
+  }
+
+// Overlays
+.loading-overlay, .error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-modals;
+}
+
+.loading-content, .error-content {
+  text-align: center;
+  color: $text-light;
+  
+  h3 {
+    margin-bottom: 16px;
+    color: $primary-color;
+    font-size: 24px;
+  }
+  
+  p {
+    margin-bottom: 24px;
+    color: $text-muted;
+  }
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid transparent;
+  border-top: 4px solid $primary-color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 24px;
+}
+
+.retry-button {
+  @include game-button($danger-color);
+  padding: 12px 24px;
+  font-size: 16px;
+}
+}
+
+// HUD principal
+.combat-hud {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 300px; // Laisser de la place pour le panneau latéral
+  height: 140px;
+  @include game-panel;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px;
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+}
+
+.active-unit-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+  
+  .unit-portrait {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid $primary-color;
+    
+    .portrait-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, $primary-color, darken($primary-color, 20%));
+    }
+  }
+  
+  .unit-info {
+    flex: 1;
+    }
+    
+    .health-bar, .mana-bar {
+      @include stat-bar();
+      margin-bottom: 4px;
+      
+      .bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width $transition-normal;
+      }
+    }
+    
+    .health-bar .bar-fill {
+      background: linear-gradient(90deg, darken($danger-color, 10%), $danger-color);
+    }
+    
+    .mana-bar .bar-fill {
+      background: linear-gradient(90deg, darken($info-color, 10%), $info-color);
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+  
+  .action-btn {
+    @include game-button($secondary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+    min-width: 80px;
+    border-radius: 8px;
+    transition: all $transition-fast;
+    
+    .icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+    
+    span {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba($secondary-color, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+  
+  .move-btn { @include game-button($info-color); }
+  .attack-btn { @include game-button($danger-color); }
+  .skill-btn { @include game-button($warning-color); }
+  .wait-btn { @include game-button($text-muted); }
+}
+
+.turn-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 120px;
+  
+  .turn-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .label {
+      font-size: 11px;
+      color: $text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .value {
+      font-size: 24px;
+      font-weight: bold;
+      color: $primary-color;
+    }
+  }
+  
+  .phase-indicator {
+    .phase {
+      font-size: 12px;
+      color: $warning-color;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      background: rgba($warning-color, 0.1);
+      border-radius: 4px;
+      border: 1px solid rgba($warning-color, 0.3);
+    }
+  }
+}
+
+// Panneau latéral
+.side-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  @include game-panel;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px 0 0 8px;
+  border-right: none;
+  overflow-y: auto;
+}
+
+.units-list {
+  flex: 0 0 auto;
+  
+  h4 {
+    color: $text-light;
+    font-size: 14px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $panel-border;
+  }
+  
+  .unit-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    transition: background-color $transition-fast;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .unit-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .unit-details {
+      flex: 1;
+      
+      .unit-name {
+        font-size: 12px;
+        color: $text-light;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      
+      .unit-bars {
+        .hp-bar {
+          height: 4px;
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 2px;
+          overflow: hidden;
+          
+          .fill {
+            height: 100%;
+            background: linear-gradient(90deg, darken($danger-color, 10%), $danger-color);
+            border-radius: 2px;
+            transition: width $transition-normal;
+          }
+        }
+      }
+    }
+  }
+}
+
+.combat-log {
+  flex: 1;
+  min-height: 200px;
+  
+  h4 {
+    color: $text-light;
+    font-size: 14px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $panel-border;
+  }
+  
+  .log-entries {
+    max-height: 300px;
+    overflow-y: auto;
+    
+    .log-entry {
+      font-size: 12px;
+      color: $text-muted;
+      padding: 4px 8px;
+      border-radius: 3px;
+      margin-bottom: 2px;
+      transition: background-color $transition-fast;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    }
+  }
+}
+
+// Contrôles de la caméra
+.camera-controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  
+  .camera-btn {
+    @include game-button($panel-border);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      @include game-button($primary-color);
+    }
+  }
+}
+
+// Panneau de debug
+.debug-panel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  @include game-panel;
+  padding: 12px;
+  min-width: 200px;
+  font-size: 11px;
+  opacity: 0.8;
+  
+  h5 {
+    color: $warning-color;
+    margin-bottom: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .debug-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    
+    .stat-group {
+      display: flex;
+      justify-content: space-between;
+      
+      .label {
+        color: $text-muted;
+        font-weight: 600;
+      }
+      
+      .value {
+        color: $text-light;
+        font-family: 'Courier New', monospace;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 1024px) {
+  .side-panel {
+    width: 250px;
+  }
+  
+  .combat-hud {
+    right: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .side-panel {
+    transform: translateX(100%);
+    transition: transform $transition-normal;
+    
+    &.open {
+      transform: translateX(0);
+    }
+  }
+  
+  .combat-hud {
+    right: 0;
+    
+    .action-buttons {
+      .action-btn {
+        min-width: 60px;
+        padding: 8px 12px;
+        
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// États des animations de combat
+.combat-container {
+  &.battle-starting {
+    .combat-ui {
+      animation: fadeIn 1s ease-in-out;
+    }
+  }
+  
+  &.turn-changing {
+    .active-unit-panel {
+      animation: pulse 0.5s ease-in-out;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}

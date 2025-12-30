@@ -1,0 +1,315 @@
+@use 'variables' as *;
+
+// Mixin pour les boutons de jeu
+@mixin game-button($color: $primary-color) {
+  background: linear-gradient(135deg, $color, darken($color, 15%));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: $text-light;
+  font-family: $font-family-primary;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, lighten($color, 5%), $color);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba($color, 0.3);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 1px 4px rgba($color, 0.4);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba($color, 0.3);
+  }
+}
+
+// Mixin pour les panneaux de jeu
+@mixin game-panel {
+  background: $panel-bg;
+  border: 1px solid $panel-border;
+  box-shadow: 0 4px 16px $panel-shadow;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+// Mixin pour les barres de statut
+@mixin stat-bar($height: 8px) {
+  width: 100%;
+  height: $height;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: $height / 2;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Mixin pour les effets de survol des éléments interactifs
+@mixin interactive-hover {
+  transition: all $transition-fast;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Mixin pour les tooltips
+@mixin tooltip($position: top) {
+  position: relative;
+  
+  &::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    z-index: $z-tooltips;
+    background: rgba(0, 0, 0, 0.9);
+    color: $text-light;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: $font-size-sm;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $transition-fast;
+    
+    @if $position == top {
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+    } @else if $position == bottom {
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+    } @else if $position == left {
+      right: 100%;
+      top: 50%;
+      transform: translateX(-4px) translateY(-50%);
+    } @else if $position == right {
+      left: 100%;
+      top: 50%;
+      transform: translateX(4px) translateY(-50%);
+    }
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: $z-tooltips;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $transition-fast;
+    
+    @if $position == top {
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid rgba(0, 0, 0, 0.9);
+    } @else if $position == bottom {
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid rgba(0, 0, 0, 0.9);
+    } @else if $position == left {
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 6px solid rgba(0, 0, 0, 0.9);
+    } @else if $position == right {
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 6px solid rgba(0, 0, 0, 0.9);
+    }
+  }
+  
+  &:hover::before,
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+// Mixin pour les animations de fade
+@mixin fade-animation($duration: $transition-normal) {
+  transition: opacity $duration ease-in-out;
+  
+  &.fade-enter {
+    opacity: 0;
+  }
+  
+  &.fade-enter-active,
+  &.fade-leave {
+    opacity: 1;
+  }
+  
+  &.fade-leave-active {
+    opacity: 0;
+  }
+}
+
+// Mixin pour les animations de slide
+@mixin slide-animation($direction: up, $distance: 20px, $duration: $transition-normal) {
+  transition: transform $duration ease-in-out, opacity $duration ease-in-out;
+  
+  &.slide-enter {
+    opacity: 0;
+    @if $direction == up {
+      transform: translateY($distance);
+    } @else if $direction == down {
+      transform: translateY(-$distance);
+    } @else if $direction == left {
+      transform: translateX($distance);
+    } @else if $direction == right {
+      transform: translateX(-$distance);
+    }
+  }
+  
+  &.slide-enter-active,
+  &.slide-leave {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  
+  &.slide-leave-active {
+    opacity: 0;
+    @if $direction == up {
+      transform: translateY(-$distance);
+    } @else if $direction == down {
+      transform: translateY($distance);
+    } @else if $direction == left {
+      transform: translateX(-$distance);
+    } @else if $direction == right {
+      transform: translateX($distance);
+    }
+  }
+}
+
+// Mixin pour les grilles flexibles
+@mixin flex-grid($gap: $spacing-md, $min-item-width: 200px) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+  
+  > * {
+    flex: 1 1 $min-item-width;
+    min-width: 0; // Empêche le débordement des éléments flex
+  }
+}
+
+// Mixin pour les scrollbars personnalisées
+@mixin custom-scrollbar($thumb-color: rgba(255, 255, 255, 0.3), $track-color: rgba(0, 0, 0, 0.1)) {
+  scrollbar-width: thin;
+  scrollbar-color: $thumb-color $track-color;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+    border-radius: 4px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+// Mixin pour les états de focus accessibles
+@mixin accessible-focus($color: $primary-color) {
+  &:focus,
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: 2px;
+  }
+  
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// Mixin pour les animations de pulsation
+@mixin pulse-animation($color: $primary-color, $duration: 2s) {
+  animation: pulse-#{unique-id()} $duration infinite;
+  
+  @keyframes pulse-#{unique-id()} {
+    0% {
+      box-shadow: 0 0 0 0 rgba($color, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba($color, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba($color, 0);
+    }
+  }
+}
+
+// Mixin pour les états de chargement
+@mixin loading-state {
+  position: relative;
+  pointer-events: none;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid $primary-color;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 2;
+  }
+}
+
+// Mixin responsive pour les media queries
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) { @content; }
+  }
+  @if $breakpoint == md {
+    @media (min-width: $breakpoint-md) { @content; }
+  }
+  @if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) { @content; }
+  }
+  @if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) { @content; }
+  }
+}

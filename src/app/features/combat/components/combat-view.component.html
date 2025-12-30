@@ -1,0 +1,139 @@
+<div class="combat-container">
+  <!-- Zone de chargement -->
+  <div class="loading-overlay" *ngIf="isLoading()">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <h3>Initialisation du combat...</h3>
+      <p>Chargement du moteur Pixi.js et des ressources</p>
+    </div>
+  </div>
+
+  <!-- Affichage des erreurs -->
+  <div class="error-overlay" *ngIf="hasError">
+    <div class="error-content">
+      <h3>Erreur de combat</h3>
+      <p>{{ error() }}</p>
+      <button class="retry-button" (click)="ngAfterViewInit()">
+        Réessayer
+      </button>
+    </div>
+  </div>
+
+  <!-- Canvas principal -->
+  <canvas 
+    #pixiCanvas 
+    class="pixi-canvas"
+    [class.interactive]="canInteract"
+    (click)="onCanvasClick($event)"
+    *ngIf="!hasError">
+  </canvas>
+
+  <!-- Interface utilisateur de combat -->
+  <div class="combat-ui" *ngIf="canInteract">
+    
+    <!-- HUD principal (bas de l'écran) -->
+    <div class="combat-hud">
+      
+      <!-- Informations de l'unité active -->
+      <div class="active-unit-panel" *ngIf="battleState()?.activeUnitId">
+        <div class="unit-portrait">
+          <div class="portrait-placeholder"></div>
+        </div>
+        <div class="unit-info">
+          <h4 class="unit-name">Unité Active</h4>
+          <div class="health-bar">
+            <div class="bar-fill" [style.width.%]="85"></div>
+          </div>
+          <div class="mana-bar">
+            <div class="bar-fill" [style.width.%]="60"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions disponibles -->
+      <div class="action-buttons">
+        <button class="action-btn move-btn" [disabled]="!canInteract">
+          <span>Déplacer</span>
+        </button>
+        <button class="action-btn attack-btn" [disabled]="!canInteract">
+          <span>Attaquer</span>
+        </button>
+        <button class="action-btn skill-btn" [disabled]="!canInteract">
+          <span>Compétence</span>
+        </button>
+        <button class="action-btn wait-btn" [disabled]="!canInteract">
+          <span>Attendre</span>
+        </button>
+      </div>
+
+      <!-- Informations du tour -->
+      <div class="turn-info">
+        <div class="turn-counter">
+          <span class="label">Tour</span>
+          <span class="value">{{ battleState()?.currentTurn || 1 }}</span>
+        </div>
+        <div class="phase-indicator">
+          <span class="phase">{{ battleState()?.phase || 'idle' }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Panneau latéral droit (informations détaillées) -->
+    <div class="side-panel">
+      
+      <!-- Liste des unités -->
+      <div class="units-list">
+        <h4>Unités en combat</h4>
+        <div class="unit-item" *ngFor="let unit of battleState()?.participants">
+          <div class="unit-details">
+            <span class="unit-name">{{ unit.name }}</span>
+            <div class="unit-bars">
+              <div class="hp-bar">
+                <div class="fill" [style.width.%]="(unit.stats.hp / unit.stats.hpMax) * 100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log de combat -->
+      <div class="combat-log">
+        <h4>Journal de combat</h4>
+        <div class="log-entries">
+          <div class="log-entry">Combat initialisé</div>
+          <div class="log-entry">En attente de l'action du joueur...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Contrôles de la caméra -->
+    <div class="camera-controls">
+      <button class="camera-btn zoom-in" (click)="camera.zoomBy(0.2)" title="Zoom avant">+</button>
+      <button class="camera-btn zoom-out" (click)="camera.zoomBy(-0.2)" title="Zoom arrière">-</button>
+      <button class="camera-btn center" (click)="camera.frameArea([{x:0,y:0,z:0},{x:19,y:19,z:0}])" title="Centrer">⌂</button>
+    </div>
+
+  </div>
+
+  <!-- Panneau de debug (développement) -->
+  <div class="debug-panel" *ngIf="engineStats() && canInteract">
+    <h5>Debug Info</h5>
+    <div class="debug-stats">
+      <div class="stat-group" *ngIf="engineStats()?.pixi">
+        <span class="label">FPS:</span>
+        <span class="value">{{ engineStats().pixi.fps | number:'1.0-0' }}</span>
+      </div>
+      <div class="stat-group" *ngIf="engineStats()?.sprites">
+        <span class="label">Sprites:</span>
+        <span class="value">{{ engineStats().sprites.activeSprites }}/{{ engineStats().sprites.totalSprites }}</span>
+      </div>
+      <div class="stat-group" *ngIf="engineStats()?.camera">
+        <span class="label">Zoom:</span>
+        <span class="value">{{ engineStats().camera.zoom | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>
