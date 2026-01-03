@@ -11,7 +11,7 @@ html, body {
   height: 100%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #1a1a1a;
-  color: $text-light;
+  color: $text;
   overflow: hidden; // Pour éviter le scroll pendant le jeu
 }
 
@@ -140,5 +140,5 @@ app-root {
 // Sélection de texte
 ::selection {
   background: rgba($primary-color, 0.3);
-  color: $text-light;
+  color: $text;
 }

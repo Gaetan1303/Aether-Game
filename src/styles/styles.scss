@@ -12,7 +12,7 @@ html, body {
   height: 100%;
   font-family: $font-family-primary;
   background: $bg-dark;
-  color: $text-light;
+  color: $text;
   overflow: hidden;
 }
 
@@ -80,7 +80,7 @@ input, textarea, select {
 .text-danger { color: $danger-color; }
 .text-warning { color: $warning-color; }
 .text-info { color: $info-color; }
-.text-light { color: $text-light; }
+.text-light { color: $text; }
 .text-muted { color: $text-muted; }
 
 .bg-primary { background-color: $primary-color; }
@@ -244,25 +244,25 @@ input, textarea, select {
   &.alert-success {
     background: rgba($success-color, 0.1);
     border-color: rgba($success-color, 0.3);
-    color: lighten($success-color, 20%);
+    color: #4bc769;
   }
   
   &.alert-danger {
     background: rgba($danger-color, 0.1);
     border-color: rgba($danger-color, 0.3);
-    color: lighten($danger-color, 20%);
+    color: #e74c3c;
   }
   
   &.alert-warning {
     background: rgba($warning-color, 0.1);
     border-color: rgba($warning-color, 0.3);
-    color: lighten($warning-color, 20%);
+    color: #f39c12;
   }
   
   &.alert-info {
     background: rgba($info-color, 0.1);
     border-color: rgba($info-color, 0.3);
-    color: lighten($info-color, 20%);
+    color: #3498db;
   }
 }
 

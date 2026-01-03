@@ -2,9 +2,9 @@
 
 // Mixin pour les boutons de jeu
 @mixin game-button($color: $primary-color) {
-  background: linear-gradient(135deg, $color, darken($color, 15%));
+  background: linear-gradient(135deg, $color, color-mix(in srgb, $color, black 15%));
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: $text-light;
+  color: $text;
   font-family: $font-family-primary;
   font-weight: 600;
   text-transform: uppercase;
@@ -13,7 +13,7 @@
   transition: all $transition-fast;
   
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, lighten($color, 5%), $color);
+    background: linear-gradient(135deg, color-mix(in srgb, $color, white 5%), $color);
     border-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 2px 8px rgba($color, 0.3);
   }
@@ -68,7 +68,7 @@
     position: absolute;
     z-index: $z-tooltips;
     background: rgba(0, 0, 0, 0.9);
-    color: $text-light;
+    color: $text;
     padding: 8px 12px;
     border-radius: 4px;
     font-size: $font-size-sm;

@@ -1,337 +1,380 @@
-          // Mixin bouton générique pour le style du menu principal
-@mixin game-button() {
-  background: #444;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 24px;
-  font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-  transition: background 0.2s, color 0.2s;
-  cursor: pointer;
-  outline: none;
-  &:hover {
-    background: #333;
-    color: #ffd700;
-  }
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-          // Correction du bloc orphelin : encapsulation dans .stat-block
-          .stat-block {
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
+// FF TACTICS ADVANCE AUTHENTIC COLORS
+$gold: #c9a876; $gold-light: #e6c589; $gold-dark: #a08751; $brown: #1a1003; $brown-med: #2d1b0a; $brown-light: #4a3218; $brown-lighter: #6b4a32;
+$text: #f8f4e8; $text-accent: #d4af37; $text-muted: #a08751; $border-gold: #d4af37; $border-dark: #1a1003; $shadow: #000000;
+$blue: #2c5aa0; $blue-dark: #1e3f73; $blue-light: #4a7bc8; $blue-bright: #6fa8f5;
+$red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
 
-            .stat-label {
-              min-width: 20px;
-              font-weight: 600;
-            }
-
-            .bar {
-              width: 60px;
-              height: 4px;
-              background: rgba(0, 0, 0, 0.5);
-              border-radius: 2px;
-              overflow: hidden;
-
-              .fill {
-                height: 100%;
-                transition: width 0.3s;
-                border-radius: 2px;
-              }
-            }
-
-            .stat-text {
-              min-width: 35px;
-              text-align: right;
-              font-size: 10px;
-              color: #b0b8d6;
-            }
-
-            &.hp .fill {
-              background: linear-gradient(90deg, #b71c1c 10%, #e74c3c 100%);
-            }
-
-            &.mp .fill {
-              background: linear-gradient(90deg, #1565c0 10%, #2196f3 100%);
-            }
-
-
-  .nav-center {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-
-    .nav-buttons {
-      display: flex;
-      gap: 8px;
-
-      .nav-button {
-        @include game-button();
-        padding: 6px 16px;
-        font-size: 11px;
-        border-radius: 20px;
-        transition: all 0.2s;
-
-        &.active {
-          @include game-button();
-        }
-
-        &:disabled {
-          opacity: 0.3;
-          cursor: not-allowed;
-        }
-      }
-    }
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    .gold-display {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #ffc107;
-      font-weight: 600;
-
-      &::before {
-        content: '💰';
-        font-size: 14px;
-      }
-    }
-
-    .logout-button {
-      @include game-button();
-      font-size: 10px;
-      padding: 4px 12px;
-    }
-  }
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-
-  .loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid transparent;
-    border-top: 4px solid #6c63ff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 16px;
-  }
-
-    color: #f5f5f5;
-    font-size: 16px;
-  }
+// FFT ADVANCE AUTHENTIC MIXINS
+@mixin border-fft { 
+  border: 3px outset $border-gold; 
+  border-top-color: $gold-light; 
+  border-left-color: $gold-light; 
+  border-bottom-color: $gold-dark; 
+  border-right-color: $gold-dark;
+  box-shadow: 
+    inset 1px 1px 0 rgba($gold-light, 0.8),
+    inset -1px -1px 0 rgba($border-dark, 0.6),
+    0 3px 6px rgba($shadow, 0.5),
+    0 1px 0 rgba($gold-light, 0.3);
 }
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.error-banner {
-  position: fixed;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #e74c3c;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 0 0 8px 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 2001;
-
-  button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.game-content {
-  width: 100%;
-  height: 100vh;
-
-  &.has-nav {
-    padding-top: 60px;
-    height: calc(100vh - 60px);
-  }
-}
-
-// --- Menu principal wireframe ---
-.main-menu {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(120deg, #23283a 0%, #1a1d2a 100%);
-  min-height: 100vh;
-  min-width: 100vw;
-  overflow: hidden;
-
-  .menu-bg {
+@mixin btn-fft { 
+  @include border-fft; 
+  background: 
+    linear-gradient(145deg, 
+      $brown-lighter 0%, 
+      $brown-light 25%, 
+      $brown-med 75%, 
+      $brown 100%
+    );
+  color: $text-accent; 
+  font: bold 14px 'Courier New', 'MS Gothic', monospace; 
+  text-shadow: 1px 1px 0 $shadow, 1px 1px 2px rgba($shadow, 0.8); 
+  cursor: pointer; 
+  transition: all 0.12s ease; 
+  position: relative;
+  &::before {
+    content: '';
     position: absolute;
-    inset: 0;
-    background: url('/assets/bg-castle.jpg') center/cover no-repeat;
-    filter: brightness(0.4) blur(1px);
-    z-index: 1;
+    top: 2px; left: 2px; right: 2px; bottom: 2px;
+    background: linear-gradient(145deg, transparent 0%, rgba($gold-light, 0.1) 50%, transparent 100%);
+    pointer-events: none;
   }
+  &:hover { 
+    background: 
+      linear-gradient(145deg, 
+        $brown-lighter 0%, 
+        color-mix(in srgb, $brown-light, $gold-light 15%) 25%, 
+        color-mix(in srgb, $brown-med, $gold 10%) 75%, 
+        $brown-med 100%
+      );
+    color: $gold-light; 
+    transform: translateY(-1px) translateX(-1px); 
+    box-shadow: 
+      inset 1px 1px 0 rgba($gold-light, 0.9),
+      inset -1px -1px 0 rgba($border-dark, 0.7),
+      2px 4px 8px rgba($shadow, 0.6),
+      0 1px 0 rgba($gold-light, 0.4);
+  } 
+  &:active { 
+    transform: translateY(1px) translateX(1px); 
+    box-shadow: 
+      inset 2px 2px 4px rgba($shadow, 0.8),
+      inset 1px 1px 0 rgba($border-dark, 0.9); 
+  } 
+  &:disabled { 
+    background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%); 
+    color: #666; 
+    cursor: not-allowed; 
+    border-color: #444;
+    box-shadow: inset 1px 1px 2px rgba($shadow, 0.5);
+  } 
+}
+@mixin panel-fft { 
+  @include border-fft; 
+  background: 
+    radial-gradient(ellipse at top left, 
+      rgba($brown-light, 0.9) 0%, 
+      rgba($brown-med, 0.95) 30%, 
+      rgba($brown, 0.98) 100%
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 1px,
+      rgba($gold, 0.02) 1px,
+      rgba($gold, 0.02) 2px
+    );
+  backdrop-filter: blur(1px); 
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px; right: 3px; bottom: 3px;
+    border: 1px solid rgba($gold-light, 0.3);
+    pointer-events: none;
+  }
+}
+@mixin bar-fill-fft($color) { 
+  background: 
+    linear-gradient(90deg, 
+      color-mix(in srgb, $color, white 30%) 0%,
+      $color 30%,
+      color-mix(in srgb, $color, black 10%) 70%,
+      color-mix(in srgb, $color, black 30%) 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(white, 0.1) 2px,
+      rgba(white, 0.1) 4px
+    );
+  border: 1px inset $color;
+  box-shadow: 
+    inset 0 1px 0 rgba(white, 0.4),
+    inset 0 -1px 0 rgba(black, 0.4),
+    0 1px 2px rgba($shadow, 0.3); 
+}
 
-          color: #b0b8d6;
+// BASE STYLE FFT ADVANCE
+:host { 
+  display: block; width: 100%; height: 100vh; 
+  background: 
+    radial-gradient(circle at 25% 25%, rgba($gold, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba($blue-dark, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, 
+      $shadow 0%, 
+      color-mix(in srgb, $brown, $shadow 70%) 25%,
+      color-mix(in srgb, $brown-med, $shadow 50%) 50%,
+      color-mix(in srgb, $brown, $shadow 70%) 75%,
+      $shadow 100%
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 100px,
+      rgba($gold, 0.01) 100px,
+      rgba($gold, 0.01) 200px
+    );
+  font-family: 'Courier New', 'MS Gothic', monospace; 
+  color: $text; 
+  overflow: hidden; 
+}
+
+// HEADER FFT ADVANCE STYLE
+.ff-nav { 
+  @include panel-fft; 
+  display: flex; align-items: center; 
+  padding: 12px 20px; margin: 6px; 
+  position: relative; z-index: 100;
+  background: 
+    linear-gradient(180deg, 
+      rgba($brown-lighter, 0.95) 0%, 
+      rgba($brown-light, 0.98) 30%,
+      rgba($brown-med, 0.99) 100%
+    );
+  
+  .logo { 
+    font: bold 20px 'Courier New', 'MS Gothic'; 
+    color: $gold-light; 
+    text-shadow: 
+      2px 2px 0 $shadow, 
+      3px 3px 0 rgba($shadow, 0.5),
+      1px 1px 0 $border-dark; 
+    margin-right: 24px; 
+    letter-spacing: 1px;
     position: relative;
-    z-index: 2;
-    width: 480px;
-    max-width: 95vw;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-  }
-
-  .menu-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-
-    .menu-logo {
-      width: 56px;
-      height: 56px;
-      margin-bottom: 8px;
-    }
-    .menu-title {
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: 2px;
-      text-shadow: 0 2px 16px #000a;
-      margin: 0;
-    }
-    .menu-subtitle {
-      font-size: 1.1rem;
-      color: #b0b8d6;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, $gold-light, transparent);
     }
   }
-
-  .menu-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    margin-bottom: 12px;
-
-    .menu-btn {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      width: 100%;
-      font-size: 1.25rem;
-      font-weight: 600;
-      padding: 18px 32px;
-      border-radius: 12px;
-      border: 2px solid transparent;
-      background: rgba(30, 36, 56, 0.85);
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.2s, border 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 16px #0004;
-      outline: none;
+  
+  .nav-items { display: flex; gap: 8px; margin-left: auto; }
+  
+  .nav-item { 
+    @include btn-fft; 
+    padding: 8px 16px; font-size: 13px; 
+    text-decoration: none; 
+    display: flex; align-items: center; gap: 8px;
+    min-width: 80px; text-align: center;
+    justify-content: center;
+    
+    &.active { 
+      background: 
+        linear-gradient(145deg, 
+          $blue-bright 0%, 
+          $blue-light 25%, 
+          $blue 75%, 
+          $blue-dark 100%
+        );
+      color: white; 
+      text-shadow: 1px 1px 0 $blue-dark, 1px 1px 2px rgba($shadow, 0.9);
+      border-top-color: $blue-bright;
+      border-left-color: $blue-bright;
+      &::before {
+        background: linear-gradient(145deg, transparent 0%, rgba(white, 0.2) 50%, transparent 100%);
+      }
+    } 
+  }
+  
+  .status-bar { 
+    display: flex; align-items: center; 
+    gap: 20px; margin-left: 24px; 
+    padding: 6px 12px;
+    background: rgba($brown, 0.3);
+    border: 2px inset $border-gold;
+    border-radius: 2px;
+  }
+  
+  .stat { 
+    display: flex; align-items: center; 
+    gap: 8px; font-size: 11px; 
+    color: $text-accent; font-weight: bold;
+    
+    .bar { 
+      width: 70px; height: 12px; 
+      background: 
+        linear-gradient(180deg, 
+          rgba($shadow, 0.8) 0%, 
+          rgba($shadow, 0.9) 50%,
+          $shadow 100%
+        );
+      border: 2px inset $border-dark;
+      border-radius: 1px; 
+      overflow: hidden; 
       position: relative;
-
-      &:hover:not(:disabled) {
-        background: rgba(60, 80, 160, 0.95);
-        border-color: #6c63ff;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        border: 1px solid rgba($gold-light, 0.2);
       }
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+      
+      .fill { 
+        height: 100%; 
+        transition: width 0.4s ease-out; 
+        position: relative;
+        
+        &.hp { @include bar-fill-fft($red-bright); }
+        &.mp { @include bar-fill-fft($blue-bright); }
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 50%;
+          background: linear-gradient(180deg, rgba(white, 0.3), transparent);
+        }
       }
-
-      .menu-btn-icon {
-        width: 28px;
-        height: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-      }
-      &.menu-btn-primary .menu-btn-icon.play {
-        background: url('/assets/icons/play.svg') center/contain no-repeat;
-      }
-      &.menu-btn-green .menu-btn-icon.save {
-        background: url('/assets/icons/save.svg') center/contain no-repeat;
-      }
-      &.menu-btn-grey .menu-btn-icon.options {
-        background: url('/assets/icons/settings.svg') center/contain no-repeat;
-      }
-      &.menu-btn-red {
-        background: linear-gradient(90deg, #e74c3c 80%, #ffb347 100%);
-        color: #fff;
-        border: 2px solid #fff;
-        box-shadow: 0 2px 16px #e74c3c44;
-      }
-      &.menu-btn-red .menu-btn-icon.quit {
-        background: url('/assets/icons/exit.svg') center/contain no-repeat;
-      }
-      &.menu-btn-red .menu-btn-arrow {
-        margin-left: auto;
-        width: 28px;
-        height: 28px;
-        background: url('/assets/icons/arrow-right.svg') center/contain no-repeat;
-        display: inline-block;
-      }
-    }
-  }
-
-  .menu-footer {
-    margin-top: 24px;
-    text-align: center;
-    color: #b0b8d6;
-    font-size: 1rem;
-    .menu-instructions {
-      margin-bottom: 4px;
-    }
-    .menu-version {
-      font-size: 0.95rem;
-      opacity: 0.7;
     }
   }
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+// MENU PRINCIPAL FFT ADVANCE
+.main-menu { 
+  display: flex; flex-direction: column; 
+  align-items: center; justify-content: center; 
+  height: calc(100vh - 80px); 
+  background: 
+    radial-gradient(ellipse at center, 
+      rgba($gold, 0.03) 0%, 
+      rgba($brown-light, 0.05) 30%,
+      transparent 70%
+    );
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20%; left: 10%; right: 10%; bottom: 20%;
+    background: 
+      repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg,
+        rgba($gold, 0.01) 1deg,
+        transparent 2deg
+      );
+    pointer-events: none;
+  }
+  
+  .menu-title { 
+    font: bold 52px 'Courier New', 'MS Gothic'; 
+    color: $gold-light; 
+    text-shadow: 
+      3px 3px 0 $shadow,
+      4px 4px 0 rgba($shadow, 0.7),
+      5px 5px 0 rgba($shadow, 0.5),
+      2px 2px 0 $border-dark,
+      0 0 20px rgba($gold-light, 0.3); 
+    margin-bottom: 50px; 
+    text-align: center; 
+    letter-spacing: 3px;
+    position: relative;
+    
+    &::after {
+      content: '~ TACTICAL CHRONICLES ~';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      color: $text-accent;
+      text-shadow: 1px 1px 0 $shadow;
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+  }
+  
+  .menu-buttons { 
+    display: flex; flex-direction: column; 
+    gap: 20px; min-width: 320px; 
+    padding: 20px;
+    background: rgba($brown, 0.2);
+    border: 3px ridge $border-gold;
+    border-radius: 4px;
+    box-shadow: 0 8px 16px rgba($shadow, 0.4);
+  }
+  
+  .menu-btn { 
+    @include btn-fft; 
+    padding: 20px 40px; font-size: 16px; 
+    width: 100%; text-align: center; 
+    text-decoration: none; 
+    position: relative; overflow: hidden;
+    font-weight: bold;
+    letter-spacing: 1px;
+    min-height: 24px;
+    
+    &::before { 
+      content: ''; position: absolute; 
+      top: 0; left: -100%; width: 100%; height: 100%; 
+      background: 
+        linear-gradient(90deg, 
+          transparent, 
+          rgba($gold-light, 0.15), 
+          transparent
+        );
+      transition: left 0.6s ease; 
+    } 
+    
+    &:hover {
+      &::before { left: 100%; }
+      box-shadow: 
+        inset 1px 1px 0 rgba($gold-light, 0.9),
+        inset -1px -1px 0 rgba($border-dark, 0.7),
+        2px 4px 12px rgba($shadow, 0.7),
+        0 0 8px rgba($gold-light, 0.2);
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 10px;
+      width: 6px; height: 6px;
+      background: $gold-light;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 0 4px rgba($gold-light, 0.6);
+    }
+  } 
+}
+
+// CONTENT
+.game-content { min-height: 100vh; &.has-nav { padding-top: 60px; } }
+
+// RESPONSIVE
+@media (max-width: 768px) {
+  .ff-nav { flex-wrap: wrap; .nav-items { order: 3; width: 100%; margin-top: 8px; } .status-bar { margin-left: 0; } }
+  .main-menu .menu-title { font-size: 36px; margin-bottom: 24px; }
+  .main-menu .menu-buttons { min-width: 280px; }
+  .main-menu .menu-btn { font-size: 16px; padding: 12px 24px; }
+}
+@media (max-width: 480px) {
+  .ff-nav { padding: 6px 12px; .logo { font-size: 16px; margin-right: 12px; } .nav-item { font-size: 12px; padding: 4px 8px; } .stat { font-size: 10px; .bar { width: 40px; height: 6px; } } }
+  .main-menu .menu-title { font-size: 28px; }
+  .main-menu .menu-buttons { min-width: 240px; }
 }

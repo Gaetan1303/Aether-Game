@@ -1,0 +1,95 @@
+<div class="new-game-container">
+  <div class="ff-panel main-panel">
+    <div class="panel-header">
+      <h1 class="title">Nouvelle Partie</h1>
+      <div class="subtitle">Créez votre aventurier</div>
+    </div>
+    
+    <div class="creation-content">
+      <!-- Section nom du personnage -->
+      <div class="character-section">
+        <div class="section-title">Nom du Personnage</div>
+        <input 
+          type="text" 
+          [(ngModel)]="characterName" 
+          class="ff-input" 
+          placeholder="Entrez le nom de votre héros"
+          maxlength="20">
+      </div>
+
+      <!-- Section classe -->
+      <div class="character-section">
+        <div class="section-title">Classe</div>
+        <div class="selection-grid">
+          @for (class of classes; track class) {
+            <button 
+              class="selection-btn" 
+              [class.selected]="selectedClass() === class"
+              (click)="selectedClass.set(class)">
+              {{class}}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Section race -->
+      <div class="character-section">
+        <div class="section-title">Race</div>
+        <div class="selection-grid">
+          @for (race of races; track race) {
+            <button 
+              class="selection-btn" 
+              [class.selected]="selectedRace() === race"
+              (click)="selectedRace.set(race)">
+              {{race}}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Section difficulté -->
+      <div class="character-section">
+        <div class="section-title">Difficulté</div>
+        <div class="selection-grid">
+          @for (diff of difficulties; track diff) {
+            <button 
+              class="selection-btn" 
+              [class.selected]="difficulty() === diff"
+              (click)="difficulty.set(diff)">
+              {{diff}}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Aperçu des statistiques -->
+      <div class="character-section stats-preview">
+        <div class="section-title">Statistiques de Base</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-name">Force</span>
+            <span class="stat-value">{{baseStats().strength}}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-name">Magie</span>
+            <span class="stat-value">{{baseStats().magic}}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-name">Agilité</span>
+            <span class="stat-value">{{baseStats().agility}}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-name">Vitalité</span>
+            <span class="stat-value">{{baseStats().vitality}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="action-buttons">
+      <button class="ff-btn secondary" routerLink="/">Retour</button>
+      <button class="ff-btn primary" (click)="startGame()">Commencer l'Aventure</button>
+    </div>
+  </div>
+</div>

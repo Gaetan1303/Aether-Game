@@ -1,0 +1,133 @@
+.gender-step {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.step-header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h2 {
+    color: #f8f8f2;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #b0b8d6;
+    font-size: 1.1rem;
+  }
+}
+
+.gender-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.gender-option {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &:hover {
+    border-color: rgba(108, 99, 255, 0.5);
+    background: rgba(108, 99, 255, 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(108, 99, 255, 0.2);
+  }
+
+  &.selected {
+    border-color: #6c63ff;
+    background: rgba(108, 99, 255, 0.2);
+    box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.3);
+  }
+
+  h3 {
+    color: #f8f8f2;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #b0b8d6;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+}
+
+.gender-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #6c63ff;
+}
+
+.selection-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #27ae60;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  color: white;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.gender-info {
+  text-align: center;
+}
+
+.info-card {
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 500px;
+  margin: 0 auto;
+
+  h4 {
+    color: #f8f8f2;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  p {
+    color: #b0b8d6;
+    line-height: 1.5;
+  }
+
+  strong {
+    color: #6c63ff;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 640px) {
+  .gender-options {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .gender-option {
+    min-height: 160px;
+    padding: 1.5rem 1rem;
+  }
+  
+  .gender-icon {
+    font-size: 2.5rem;
+  }
+}
