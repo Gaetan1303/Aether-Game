@@ -1,13 +1,551 @@
 // NEW GAME STYLES - FFT ADVANCE DIRECT VALUES
-.new-game-container {
-  padding: 20px;
+// Import des boutons normalisés
+@use '../../../styles/components/buttons';
+
+// Variables FFT Advance
+$fft-gold: #d4af37;
+$fft-gold-light: #e6c589;
+$fft-brown: #2d1b0a;
+$fft-brown-light: #4a3218;
+$fft-text: #f8f4e8;
+$fft-border: 3px outset $fft-gold;
+
+.character-creator {
   min-height: 100vh;
-  background: 
-    radial-gradient(circle at 30% 20%, rgba(201, 168, 118, 0.05) 0%, transparent 60%),
-    radial-gradient(circle at 70% 80%, rgba(30, 63, 115, 0.03) 0%, transparent 60%),
-    linear-gradient(135deg, #000000 0%, #0f0905 100%);
+  background: linear-gradient(135deg, #000000 0%, #0f0905 100%);
+  color: $fft-text;
   font-family: 'Courier New', 'MS Gothic', monospace;
-  color: #f8f4e8;
+  padding: 20px;
+  
+  // ===== HEADER DE FICHE DE PERSONNAGE =====
+  .character-sheet-header {
+    display: grid;
+    grid-template-columns: 300px 1fr 400px;
+    gap: 30px;
+    margin-bottom: 40px;
+    min-height: 250px;
+    
+    // Portrait du personnage (gauche)
+    .character-portrait {
+      border: $fft-border;
+      border-top-color: $fft-gold-light;
+      border-left-color: $fft-gold-light;
+      background: linear-gradient(145deg, $fft-brown-light 0%, $fft-brown 100%);
+      padding: 20px;
+      border-radius: 8px;
+      
+      .sprite-container {
+        text-align: center;
+        
+        .character-sprite {
+          width: 150px;
+          height: 180px;
+          margin: 0 auto 15px;
+          position: relative;
+          border: 2px solid $fft-gold;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 48px;
+          
+          .sprite-hair {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 30px;
+            border-radius: 30px 30px 10px 10px;
+          }
+          
+          .sprite-eyes {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 8px;
+            border-radius: 4px;
+          }
+        }
+        
+        .sprite-info {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          
+          .race-badge, .class-badge {
+            background: linear-gradient(145deg, #6fa8f5 0%, #1e3f73 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #000;
+          }
+        }
+      }
+    }
+    
+    // Nom du personnage (centre)
+    .character-name-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      
+      .name-input-container {
+        margin-bottom: 20px;
+        
+        .character-name-input {
+          font-size: 24px;
+          font-weight: bold;
+          text-align: center;
+          background: linear-gradient(145deg, $fft-brown-light 0%, $fft-brown 100%);
+          border: $fft-border;
+          color: $fft-gold;
+          padding: 15px 30px;
+          border-radius: 8px;
+          width: 300px;
+          max-width: 100%;
+          
+          &::placeholder {
+            color: rgba($fft-gold, 0.6);
+          }
+          
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba($fft-gold, 0.5);
+            border-color: $fft-gold-light;
+          }
+        }
+      }
+      
+      .character-title {
+        font-size: 18px;
+        color: $fft-gold-light;
+        text-shadow: 1px 1px 0 #000;
+        font-weight: bold;
+      }
+    }
+    
+    // Panel de stats (droite)
+    .character-stats-panel {
+      border: $fft-border;
+      border-top-color: $fft-gold-light;
+      border-left-color: $fft-gold-light;
+      background: linear-gradient(145deg, $fft-brown-light 0%, $fft-brown 100%);
+      padding: 20px;
+      border-radius: 8px;
+      
+      .stats-header {
+        font-size: 18px;
+        font-weight: bold;
+        color: $fft-gold;
+        text-align: center;
+        margin-bottom: 20px;
+        text-shadow: 1px 1px 0 #000;
+      }
+      
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 25px;
+        
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px;
+          background: linear-gradient(145deg, rgba($fft-gold, 0.1) 0%, rgba($fft-brown, 0.8) 100%);
+          border: 2px solid transparent;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+          
+          .stat-label {
+            flex: 1;
+            font-size: 14px;
+            color: $fft-text;
+            font-weight: bold;
+          }
+          
+          .stat-value {
+            font-weight: bold;
+            font-size: 16px;
+            color: $fft-gold;
+            text-shadow: 1px 1px 0 #000;
+          }
+          
+          &.primary { border-color: rgba(#ff6b6b, 0.5); }
+          &.magic { border-color: rgba(#4ecdc4, 0.5); }
+          &.agility { border-color: rgba(#45b7d1, 0.5); }
+          &.vitality { border-color: rgba(#96ceb4, 0.5); }
+        }
+      }
+      
+      .skills-preview {
+        .skills-header {
+          font-size: 16px;
+          font-weight: bold;
+          color: $fft-gold;
+          margin-bottom: 10px;
+        }
+        
+        .selected-skills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          
+          .skill-badge {
+            background: linear-gradient(145deg, #e85a8a 0%, #5d0e25 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #000;
+          }
+          
+          .no-skills {
+            color: rgba($fft-text, 0.6);
+            font-style: italic;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  // ===== ZONE DE CUSTOMISATION =====
+  .customization-area {
+    border: $fft-border;
+    border-top-color: $fft-gold-light;
+    border-left-color: $fft-gold-light;
+    background: linear-gradient(145deg, $fft-brown-light 0%, $fft-brown 100%);
+    border-radius: 8px;
+    overflow: hidden;
+    
+    // Navigation des étapes
+    .step-navigation {
+      display: flex;
+      background: linear-gradient(145deg, $fft-brown 0%, #1a1003 100%);
+      border-bottom: 2px solid $fft-gold;
+      
+      .step-btn {
+        flex: 1;
+        padding: 15px 20px;
+        background: transparent;
+        border: none;
+        color: rgba($fft-text, 0.7);
+        font: bold 14px 'Courier New', monospace;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        
+        &:hover:not(.disabled) {
+          background: rgba($fft-gold, 0.1);
+          color: $fft-gold;
+        }
+        
+        &.active {
+          background: linear-gradient(145deg, $fft-gold 0%, #b8860b 100%);
+          color: #000;
+          font-weight: bold;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: $fft-gold-light;
+          }
+        }
+        
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+    
+    // Contenu des étapes
+    .step-content {
+      padding: 30px;
+      min-height: 400px;
+      
+      h3 {
+        color: $fft-gold;
+        font-size: 24px;
+        margin-bottom: 30px;
+        text-shadow: 1px 1px 0 #000;
+        text-align: center;
+      }
+      
+      .customization-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 25px;
+      }
+      
+      .customization-group {
+        margin-bottom: 25px;
+        
+        label {
+          display: block;
+          color: $fft-gold;
+          font-weight: bold;
+          margin-bottom: 10px;
+          font-size: 16px;
+        }
+        
+        .option-buttons {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        
+        .color-palette {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          
+          .color-button {
+            width: 40px;
+            height: 40px;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            
+            &:hover {
+              transform: scale(1.1);
+              border-color: $fft-gold;
+            }
+            
+            &.selected {
+              border-color: $fft-gold-light;
+              box-shadow: 0 0 10px rgba($fft-gold, 0.8);
+              
+              &::after {
+                content: '✓';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-weight: bold;
+                text-shadow: 1px 1px 0 #000;
+              }
+            }
+          }
+        }
+      }
+      
+      // Grilles spécialisées
+      .class-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        
+        .class-card {
+          border: 2px solid transparent;
+          background: linear-gradient(145deg, rgba($fft-gold, 0.1) 0%, rgba($fft-brown, 0.8) 100%);
+          padding: 15px;
+          border-radius: 8px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+          .class-name {
+            font-weight: bold;
+            color: $fft-gold;
+            margin-bottom: 8px;
+            font-size: 16px;
+          }
+          
+          .class-description {
+            font-size: 12px;
+            color: rgba($fft-text, 0.8);
+          }
+          
+          &:hover {
+            border-color: $fft-gold;
+            transform: translateY(-2px);
+          }
+          
+          &.selected {
+            border-color: $fft-gold-light;
+            background: linear-gradient(145deg, rgba($fft-gold, 0.2) 0%, rgba($fft-gold, 0.1) 100%);
+            box-shadow: 0 0 15px rgba($fft-gold, 0.5);
+          }
+        }
+      }
+      
+      .skills-selection {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+        
+        .skill-button {
+          background: linear-gradient(145deg, rgba($fft-text, 0.1) 0%, rgba($fft-brown, 0.8) 100%);
+          border: 2px solid transparent;
+          color: $fft-text;
+          padding: 8px 16px;
+          border-radius: 20px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          font-size: 14px;
+          
+          &:hover:not(.disabled) {
+            border-color: $fft-gold;
+          }
+          
+          &.selected {
+            background: linear-gradient(145deg, #e85a8a 0%, #5d0e25 100%);
+            border-color: #e85a8a;
+            color: white;
+            
+            .check-mark {
+              margin-left: 8px;
+              color: white;
+              font-weight: bold;
+            }
+          }
+          
+          &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+      
+      .skills-counter {
+        color: $fft-gold;
+        font-size: 14px;
+        text-align: center;
+        margin-top: 10px;
+      }
+      
+      .gods-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        
+        .god-button {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 15px;
+          min-height: 60px;
+        }
+      }
+      
+      .alignment-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        
+        .alignment-button {
+          background: linear-gradient(145deg, rgba($fft-text, 0.1) 0%, rgba($fft-brown, 0.8) 100%);
+          border: 2px solid transparent;
+          color: $fft-text;
+          padding: 10px;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 12px;
+          text-align: center;
+          
+          &:hover {
+            border-color: $fft-gold;
+          }
+          
+          &.selected {
+            border-color: $fft-gold-light;
+            background: linear-gradient(145deg, rgba($fft-gold, 0.2) 0%, rgba($fft-gold, 0.1) 100%);
+            color: $fft-gold;
+          }
+        }
+      }
+    }
+    
+    // Actions des étapes
+    .step-actions {
+      padding: 20px 30px;
+      background: linear-gradient(145deg, $fft-brown 0%, #1a1003 100%);
+      border-top: 2px solid $fft-gold;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    // Validation des étapes individuelles
+    .step-validation {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px solid rgba($fft-gold, 0.3);
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+// États de chargement
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $fft-gold;
+  font-style: italic;
+}
+
+// Responsive
+@media (max-width: 1200px) {
+  .character-creator .character-sheet-header {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .character-creator {
+    padding: 15px;
+    
+    .customization-area .step-content {
+      padding: 20px 15px;
+      
+      .customization-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .class-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .gods-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .alignment-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
 }
 
 .page-title {

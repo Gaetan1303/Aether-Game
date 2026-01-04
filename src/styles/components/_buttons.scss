@@ -1,0 +1,199 @@
+// ===== NORMALISATION DES BOUTONS FFT ADVANCE =====
+
+// Variables pour boutons
+$btn-primary: #6fa8f5;
+$btn-primary-dark: #1e3f73;
+$btn-secondary: #e85a8a;
+$btn-secondary-dark: #5d0e25;
+$btn-success: #4bc769;
+$btn-success-dark: #2d5016;
+$btn-danger: #e74c3c;
+$btn-danger-dark: #8b1538;
+$btn-warning: #f39c12;
+$btn-warning-dark: #b8860b;
+
+// Mixin de base pour tous les boutons
+@mixin btn-base {
+  border: 3px outset #d4af37;
+  border-top-color: #e6c589;
+  border-left-color: #e6c589;
+  border-bottom-color: #a08751;
+  border-right-color: #a08751;
+  background: linear-gradient(145deg, #6b4a32 0%, #4a3218 25%, #2d1b0a 75%, #1a1003 100%);
+  color: #d4af37;
+  font: bold 14px 'Courier New', 'MS Gothic', monospace;
+  text-shadow: 1px 1px 0 #000000, 1px 1px 2px rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+  transition: all 0.12s ease;
+  position: relative;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  
+  &:hover {
+    background: linear-gradient(145deg, #6b4a32 0%, #5a3d28 25%, #3d2817 75%, #2d1b0a 100%);
+    color: #e6c589;
+    transform: translateY(-1px) translateX(-1px);
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.6);
+  }
+  
+  &:active {
+    transform: translateY(1px) translateX(1px);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+  
+  &:disabled {
+    background: linear-gradient(145deg, #333 0%, #1a1a1a 100%);
+    color: #666;
+    cursor: not-allowed;
+    border-color: #444;
+    transform: none;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Variantes de boutons
+@mixin btn-primary {
+  @include btn-base;
+  background: linear-gradient(145deg, $btn-primary 0%, #4a7bc8 25%, #2c5aa0 75%, $btn-primary-dark 100%);
+  color: white;
+  border-top-color: $btn-primary;
+  border-left-color: $btn-primary;
+  text-shadow: 1px 1px 0 $btn-primary-dark;
+  
+  &:hover {
+    box-shadow: 2px 4px 12px rgba(44, 90, 160, 0.5), 0 0 8px rgba($btn-primary, 0.3);
+  }
+}
+
+@mixin btn-secondary {
+  @include btn-base;
+  background: linear-gradient(145deg, $btn-secondary 0%, #b8376b 25%, #8b1538 75%, $btn-secondary-dark 100%);
+  color: white;
+  border-top-color: $btn-secondary;
+  border-left-color: $btn-secondary;
+  text-shadow: 1px 1px 0 $btn-secondary-dark;
+}
+
+@mixin btn-success {
+  @include btn-base;
+  background: linear-gradient(145deg, $btn-success 0%, #27ae60 25%, #229954 75%, $btn-success-dark 100%);
+  color: white;
+  border-top-color: $btn-success;
+  border-left-color: $btn-success;
+  text-shadow: 1px 1px 0 $btn-success-dark;
+}
+
+@mixin btn-danger {
+  @include btn-base;
+  background: linear-gradient(145deg, $btn-danger 0%, #c0392b 25%, #a93226 75%, $btn-danger-dark 100%);
+  color: white;
+  border-top-color: $btn-danger;
+  border-left-color: $btn-danger;
+  text-shadow: 1px 1px 0 $btn-danger-dark;
+}
+
+@mixin btn-warning {
+  @include btn-base;
+  background: linear-gradient(145deg, $btn-warning 0%, #e67e22 25%, #d68910 75%, $btn-warning-dark 100%);
+  color: white;
+  border-top-color: $btn-warning;
+  border-left-color: $btn-warning;
+  text-shadow: 1px 1px 0 $btn-warning-dark;
+}
+
+// Tailles de boutons
+@mixin btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+  min-height: 28px;
+}
+
+@mixin btn-md {
+  padding: 10px 20px;
+  font-size: 14px;
+  min-height: 36px;
+}
+
+@mixin btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+  min-height: 44px;
+}
+
+@mixin btn-xl {
+  padding: 18px 36px;
+  font-size: 18px;
+  min-height: 52px;
+}
+
+// Classes utilitaires
+.btn {
+  @include btn-base;
+  @include btn-md;
+}
+
+// Classes FF-BTN spécifiques pour les templates
+.ff-btn {
+  @include btn-base;
+  @include btn-md;
+  
+  &.primary { @include btn-primary; }
+  &.secondary { @include btn-secondary; }
+  &.success { @include btn-success; }
+  &.danger { @include btn-danger; }
+  &.warning { @include btn-warning; }
+  
+  &.sm { @include btn-sm; }
+  &.lg { @include btn-lg; }
+  &.xl { @include btn-xl; }
+  
+  &.block {
+    width: 100%;
+    display: flex;
+  }
+}
+
+// Boutons de sélection
+.selection-btn {
+  @include btn-base;
+  @include btn-sm;
+  @include btn-secondary;
+  
+  &.selected {
+    @include btn-primary;
+    transform: translateY(1px);
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.btn-primary { @include btn-primary; }
+.btn-secondary { @include btn-secondary; }
+.btn-success { @include btn-success; }
+.btn-danger { @include btn-danger; }
+.btn-warning { @include btn-warning; }
+
+.btn-sm { @include btn-sm; }
+.btn-md { @include btn-md; }
+.btn-lg { @include btn-lg; }
+.btn-xl { @include btn-xl; }
+
+.btn-block {
+  width: 100%;
+  display: flex;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+  
+  .btn {
+    flex: 1;
+  }
+  
+  &.vertical {
+    flex-direction: column;
+  }
+}

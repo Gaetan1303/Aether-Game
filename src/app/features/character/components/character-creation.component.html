@@ -1,4 +1,3 @@
-
 <!-- Container principal de création -->
 <div class="character-creation-container" 
      *ngIf="{ state: state$ | async, steps: steps$ | async, connected: isConnected$ | async } as vm">
@@ -28,7 +27,7 @@
     
     <!-- Navigation par étapes (stepper) -->
     <div class="step-navigation">
-      <div *ngFor="let step of vm.steps" 
+      <div *ngFor="let step of vm.steps; trackBy: trackByStepId" 
            class="step-nav-item"
            [class.active]="step.id === vm.state!.currentStep"
            [class.completed]="step.isValid"

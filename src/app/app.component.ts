@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { GameStateService } from '@core/services/game-state.service';
 import { AuthService } from '@core/services/auth.service';
+import { AetherApiService } from './shared/services/aether-api.service';
 
 @Component({
   selector: 'app-root',
@@ -18,11 +19,15 @@ export class AppComponent implements OnInit {
   public gameStateService = inject(GameStateService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private aetherApi = inject(AetherApiService);
   
   // Signaux Angular pour la réactivité
   gameState = this.gameStateService.getGameState();
   authState = this.authService.getAuthState();
   playerStats = this.gameStateService.getPlayerStats();
+  
+  // Signal pour le statut de connexion API
+  isApiConnected = signal<boolean>(false);
   
   // Signal pour l'animation du titre
   titleAnimation = signal<boolean>(false);
@@ -69,6 +74,11 @@ export class AppComponent implements OnInit {
     // Écouter les changements de route
     this.router.events.subscribe(() => {
       this.currentUrl.set(this.router.url);
+    });
+    
+    // Écouter l'état de connexion API
+    this.aetherApi.isConnected$.subscribe(connected => {
+      this.isApiConnected.set(connected);
     });
     
     // Effect pour animer le titre au démarrage

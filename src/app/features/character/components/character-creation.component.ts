@@ -209,4 +209,9 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   getProgress(currentStep: number): number {
     return Math.round((currentStep / 5) * 100);
   }
+
+  // Ajout de la fonction trackBy pour optimiser *ngFor
+  trackByStepId(index: number, step: CharacterCreationStep): number {
+    return step.id;
+  }
 }

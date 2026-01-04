@@ -49,8 +49,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kB",
-                  "maximumError": "10kB"
+                  "maximumWarning": "40kB",
+                  "maximumError": "50kB"
                 }
               ],
               "outputHashing": "all"
@@ -107,5 +107,6 @@
   },
   "cli": {
     "analytics": false
-  }
+  },
+  "proxyConfig": "proxy.conf.json"
 }

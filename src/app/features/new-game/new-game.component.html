@@ -1,95 +1,353 @@
-<div class="new-game-container">
-  <div class="ff-panel main-panel">
-    <div class="panel-header">
-      <h1 class="title">Nouvelle Partie</h1>
-      <div class="subtitle">Créez votre aventurier</div>
+<div class="character-creator">
+  <!-- Fiche de personnage en haut -->
+  <div class="character-sheet-header">
+    <!-- Image du personnage (gauche) -->
+    <div class="character-portrait">
+      <div class="sprite-container">
+        <div class="character-sprite" 
+             [style.background]="'linear-gradient(45deg, rgb(' + skinColor().r + ',' + skinColor().g + ',' + skinColor().b + '), rgba(' + skinColor().r + ',' + skinColor().g + ',' + skinColor().b + ', 0.8))'">
+          <div class="sprite-hair" 
+               [style.background-color]="'rgb(' + hairColor().r + ',' + hairColor().g + ',' + hairColor().b + ')'"></div>
+          <div class="sprite-eyes" 
+               [style.background-color]="'rgb(' + eyeColor().r + ',' + eyeColor().g + ',' + eyeColor().b + ')'"></div>
+        </div>
+        <div class="sprite-info">
+          <span class="race-badge">{{ selectedRace() }}</span>
+          <span class="class-badge">{{ selectedClass() }}</span>
+        </div>
+      </div>
     </div>
     
-    <div class="creation-content">
-      <!-- Section nom du personnage -->
-      <div class="character-section">
-        <div class="section-title">Nom du Personnage</div>
+    <!-- Nom du personnage (centre) -->
+    <div class="character-name-section">
+      <div class="name-input-container">
         <input 
           type="text" 
           [(ngModel)]="characterName" 
-          class="ff-input" 
-          placeholder="Entrez le nom de votre héros"
+          class="character-name-input ff-input" 
+          placeholder="Nom du héros"
           maxlength="20">
       </div>
-
-      <!-- Section classe -->
-      <div class="character-section">
-        <div class="section-title">Classe</div>
-        <div class="selection-grid">
-          @for (class of classes; track class) {
-            <button 
-              class="selection-btn" 
-              [class.selected]="selectedClass() === class"
-              (click)="selectedClass.set(class)">
-              {{class}}
-            </button>
-          }
+      <div class="character-title">
+        Niveau 1 {{ selectedClass() }}
+      </div>
+    </div>
+    
+    <!-- Fiche de stats (droite) -->
+    <div class="character-stats-panel">
+      <div class="stats-header">Statistiques</div>
+      <div class="stats-grid">
+        <div class="stat-item primary">
+          <span class="stat-label">Force</span>
+          <span class="stat-value">{{ baseStats().strength }}</span>
+        </div>
+        <div class="stat-item magic">
+          <span class="stat-label">Magie</span>
+          <span class="stat-value">{{ baseStats().magic }}</span>
+        </div>
+        <div class="stat-item agility">
+          <span class="stat-label">Agilité</span>
+          <span class="stat-value">{{ baseStats().agility }}</span>
+        </div>
+        <div class="stat-item vitality">
+          <span class="stat-label">Vitalité</span>
+          <span class="stat-value">{{ baseStats().vitality }}</span>
         </div>
       </div>
-
-      <!-- Section race -->
-      <div class="character-section">
-        <div class="section-title">Race</div>
-        <div class="selection-grid">
-          @for (race of races; track race) {
-            <button 
-              class="selection-btn" 
-              [class.selected]="selectedRace() === race"
-              (click)="selectedRace.set(race)">
-              {{race}}
-            </button>
+      
+      <!-- Compétences sélectionnées -->
+      <div class="skills-preview">
+        <div class="skills-header">Compétences</div>
+        <div class="selected-skills">
+          @for (skill of selectedSkills(); track skill) {
+            <span class="skill-badge">{{ skill }}</span>
           }
-        </div>
-      </div>
-
-      <!-- Section difficulté -->
-      <div class="character-section">
-        <div class="section-title">Difficulté</div>
-        <div class="selection-grid">
-          @for (diff of difficulties; track diff) {
-            <button 
-              class="selection-btn" 
-              [class.selected]="difficulty() === diff"
-              (click)="difficulty.set(diff)">
-              {{diff}}
-            </button>
+          @if (selectedSkills().length === 0) {
+            <span class="no-skills">Aucune compétence</span>
           }
-        </div>
-      </div>
-
-      <!-- Aperçu des statistiques -->
-      <div class="character-section stats-preview">
-        <div class="section-title">Statistiques de Base</div>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-name">Force</span>
-            <span class="stat-value">{{baseStats().strength}}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-name">Magie</span>
-            <span class="stat-value">{{baseStats().magic}}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-name">Agilité</span>
-            <span class="stat-value">{{baseStats().agility}}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-name">Vitalité</span>
-            <span class="stat-value">{{baseStats().vitality}}</span>
-          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Boutons d'action -->
-    <div class="action-buttons">
-      <button class="ff-btn secondary" routerLink="/">Retour</button>
-      <button class="ff-btn primary" (click)="startGame()">Commencer l'Aventure</button>
+  <!-- Zone de personnalisation par étapes -->
+  <div class="customization-area">
+    <!-- Navigation des étapes -->
+    <div class="step-navigation">
+      <button 
+        class="step-btn" 
+        [class.active]="currentStep() === 'appearance'"
+        (click)="currentStep.set('appearance')">
+        1. Apparence
+      </button>
+      <button 
+        class="step-btn" 
+        [class.active]="currentStep() === 'class'"
+        [class.disabled]="!canAccessClassStep()"
+        (click)="canAccessClassStep() ? currentStep.set('class') : null">
+        2. Classe & Compétences
+      </button>
+      <button 
+        class="step-btn" 
+        [class.active]="currentStep() === 'divine'"
+        [class.disabled]="!canAccessDivineStep()"
+        (click)="canAccessDivineStep() ? currentStep.set('divine') : null">
+        3. Divin & Alignement
+      </button>
+    </div>
+
+    <!-- Contenu des étapes -->
+    <div class="step-content">
+      <!-- ÉTAPE 1: Apparence -->
+      @if (currentStep() === 'appearance') {
+        <div class="appearance-customization">
+          <h3>Personnalisation de l'Apparence</h3>
+          
+          <!-- Race et Genre -->
+          <div class="customization-row">
+            <div class="customization-group">
+              <label>Race</label>
+              <div class="option-buttons">
+                @for (race of races; track race) {
+                  <button 
+                    class="ff-btn" 
+                    [class.primary]="selectedRace() === race"
+                    [class.secondary]="selectedRace() !== race"
+                    (click)="selectedRace.set(race)">
+                    {{ race }}
+                  </button>
+                }
+              </div>
+            </div>
+            
+            <div class="customization-group">
+              <label>Genre</label>
+              <div class="option-buttons">
+                @for (gender of sexes; track gender) {
+                  <button 
+                    class="ff-btn" 
+                    [class.primary]="selectedGender() === gender"
+                    [class.secondary]="selectedGender() !== gender"
+                    (click)="selectedGender.set(gender)">
+                    {{ gender }}
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+          
+          <!-- Teint de peau -->
+          <div class="customization-group">
+            <label>Teint de Peau</label>
+            <div class="color-palette">
+              @for (tone of skinTones; track tone.name) {
+                <button 
+                  class="color-button"
+                  [class.selected]="skinColor().r === tone.color.r && skinColor().g === tone.color.g && skinColor().b === tone.color.b"
+                  [style.background-color]="'rgb(' + tone.color.r + ',' + tone.color.g + ',' + tone.color.b + ')'"
+                  (click)="updateSkinColor(tone.color)"
+                  [title]="tone.name">
+                </button>
+              }
+            </div>
+          </div>
+          
+          <!-- Couleur des cheveux -->
+          <div class="customization-group">
+            <label>Couleur des Cheveux</label>
+            <div class="color-palette">
+              @for (hair of hairColors; track hair.name) {
+                <button 
+                  class="color-button"
+                  [class.selected]="hairColor().r === hair.color.r && hairColor().g === hair.color.g && hairColor().b === hair.color.b"
+                  [style.background-color]="'rgb(' + hair.color.r + ',' + hair.color.g + ',' + hair.color.b + ')'"
+                  (click)="updateHairColor(hair.color)"
+                  [title]="hair.name">
+                </button>
+              }
+            </div>
+          </div>
+          
+          <!-- Couleur des yeux -->
+          <div class="customization-group">
+            <label>Couleur des Yeux</label>
+            <div class="color-palette">
+              @for (eye of eyeColors; track eye.name) {
+                <button 
+                  class="color-button"
+                  [class.selected]="eyeColor().r === eye.color.r && eyeColor().g === eye.color.g && eyeColor().b === eye.color.b"
+                  [style.background-color]="'rgb(' + eye.color.r + ',' + eye.color.g + ',' + eye.color.b + ')'"
+                  (click)="updateEyeColor(eye.color)"
+                  [title]="eye.name">
+                </button>
+              }
+            </div>
+          </div>
+          
+          <!-- Style de cheveux -->
+          <div class="customization-group">
+            <label>Style de Cheveux</label>
+            <div class="option-buttons">
+              @for (style of hairStyles; track style) {
+                <button 
+                  class="ff-btn"
+                  [class.primary]="hairStyle() === style"
+                  [class.secondary]="hairStyle() !== style"
+                  (click)="hairStyle.set(style)">
+                  {{ style }}
+                </button>
+              }
+            </div>
+          </div>
+          
+          <!-- Style de barbe (si masculin) -->
+          @if (selectedGender() === 'Masculin') {
+            <div class="customization-group">
+              <label>Style de Barbe</label>
+              <div class="option-buttons">
+                @for (beard of beardStyles; track beard) {
+                  <button 
+                    class="ff-btn"
+                    [class.primary]="beardStyle() === beard"
+                    [class.secondary]="beardStyle() !== beard"
+                    (click)="beardStyle.set(beard)">
+                    {{ beard || 'Aucune' }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+        
+        <!-- Bouton de validation pour l'étape apparence -->
+        <div class="step-validation">
+          <button class="ff-btn primary" (click)="nextStep()" [disabled]="!characterName().trim()">
+            Valider l'Apparence →
+          </button>
+        </div>
+      }
+      
+      <!-- ÉTAPE 2: Classe et Compétences -->
+      @if (currentStep() === 'class') {
+        <div class="class-customization">
+          <h3>Classe et Compétences</h3>
+          
+          <!-- Sélection de classe -->
+          <div class="customization-group">
+            <label>Classe Initiale</label>
+            @if (isLoading()) {
+              <div class="loading">⏳ Chargement des classes...</div>
+            } @else {
+              <div class="class-grid">
+                @for (job of displayClasses(); track job) {
+                  <div class="class-card" 
+                       [class.selected]="selectedClass() === job"
+                       (click)="selectedClass.set(job)">
+                    <div class="class-name">{{ job }}</div>
+                    <div class="class-description">
+                      @switch (job) {
+                        @case ('Guerrier') { Combattant au corps à corps }
+                        @case ('Mage') { Maître des sorts }
+                        @case ('Archer') { Tireur d'élite }
+                        @case ('Voleur') { Spécialiste furtif }
+                        @case ('Clerc') { Guérisseur divin }
+                        @default { Classe d'aventurier }
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          
+          <!-- Sélection des compétences -->
+          <div class="customization-group">
+            <label>Compétences Initiales (Maximum 3)</label>
+            <div class="skills-selection">
+              @for (skill of availableSkills(); track skill) {
+                <button 
+                  class="skill-button"
+                  [class.selected]="selectedSkills().includes(skill)"
+                  [class.disabled]="!selectedSkills().includes(skill) && selectedSkills().length >= 3"
+                  (click)="toggleSkill(skill)">
+                  {{ skill }}
+                  @if (selectedSkills().includes(skill)) {
+                    <span class="check-mark">✓</span>
+                  }
+                </button>
+              }
+            </div>
+            <div class="skills-counter">
+              {{ selectedSkills().length }} / 3 compétences sélectionnées
+            </div>
+          </div>
+        </div>
+      }
+      
+      <!-- ÉTAPE 3: Divin et Alignement -->
+      @if (currentStep() === 'divine') {
+        <div class="divine-customization">
+          <h3>Croyances et Alignement</h3>
+          
+          <!-- Sélection du dieu -->
+          <div class="customization-group">
+            <label>Divinité Protectrice</label>
+            <div class="gods-grid">
+              @for (god of gods; track god) {
+                <button 
+                  class="god-button ff-btn"
+                  [class.primary]="selectedGod() === god"
+                  [class.secondary]="selectedGod() !== god"
+                  (click)="selectedGod.set(god)">
+                  <span>{{ god }}</span>
+                </button>
+              }
+            </div>
+          </div>
+          
+          <!-- Sélection de l'alignement -->
+          <div class="customization-group">
+            <label>Alignement Moral</label>
+            <div class="alignment-grid">
+              @for (alignment of alignments; track alignment) {
+                <button 
+                  class="alignment-button"
+                  [class.selected]="selectedAlignment() === alignment"
+                  (click)="selectedAlignment.set(alignment)">
+                  {{ alignment }}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Boutons de navigation -->
+    <div class="step-actions">
+      @if (currentStep() !== 'appearance') {
+        <button class="ff-btn secondary" (click)="previousStep()">
+          ← Précédent
+        </button>
+      }
+      
+      @if (currentStep() !== 'divine') {
+        <button class="ff-btn primary" (click)="nextStep()">
+          Suivant →
+        </button>
+      } @else {
+        <button class="ff-btn success" (click)="createCharacter()">
+          @if (isLoading()) {
+            Création...
+          } @else {
+            Créer le Personnage
+          }
+        </button>
+      }
+      
+      <button class="ff-btn danger" routerLink="/">
+        Annuler
+      </button>
     </div>
   </div>
 </div>

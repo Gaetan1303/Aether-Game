@@ -1,5 +1,6 @@
 @use 'variables' as *;
 @use 'mixins' as *;
+@use './styles/components/buttons';
 
 * {
   margin: 0;

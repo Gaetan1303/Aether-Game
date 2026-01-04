@@ -17,7 +17,7 @@ import {
 })
 export class AetherApiService {
   private http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:8080/aether/v1';
+  private readonly baseUrl = 'http://localhost:8080/aether/v2'; // Mise à jour vers la nouvelle version de l'endpoint
   private readonly systemUrl = 'http://localhost:8080';
 
   // États réactifs
@@ -80,6 +80,48 @@ export class AetherApiService {
    */
   getJobDetails(jobId: string): Observable<{ job: Job }> {
     return this.http.get<{ job: Job }>(`${this.baseUrl}/joueurs/jobs/${jobId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  // ===== CRÉATION DE JOUEUR =====
+
+  /**
+   * Créer un nouveau personnage (RESTful)
+   */
+  createJoueur(joueurData: JoueurCreateDTO): Observable<JoueurResponseDTO> {
+    return this.http.post<JoueurResponseDTO>(`${this.baseUrl}/joueurs`, joueurData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Créer un nouveau personnage (Legacy - mais fonctionnel)
+   */
+  createJoueurLegacy(joueurData: JoueurCreateDTO): Observable<JoueurResponseDTO> {
+    return this.http.post<JoueurResponseDTO>(`${this.baseUrl}/joueurs/create`, joueurData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Récupérer tous les personnages
+   */
+  getAllJoueurs(): Observable<JoueurResponseDTO[]> {
+    return this.http.get<JoueurResponseDTO[]>(`${this.baseUrl}/joueurs`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Récupérer un personnage spécifique
+   */
+  getJoueurById(id: string): Observable<JoueurResponseDTO> {
+    return this.http.get<JoueurResponseDTO>(`${this.baseUrl}/joueurs/${id}`)
       .pipe(
         catchError(this.handleError)
       );
