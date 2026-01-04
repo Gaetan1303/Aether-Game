@@ -8,6 +8,7 @@ import {
   CustomisationOptions,
   Job 
 } from '../interfaces/character-creation.interface';
+import { ValidationService } from './validation.service';
 
 
 
@@ -184,8 +185,63 @@ export class CharacterCreationService {
 
   private updateCharacterData(update: Partial<JoueurCreateDTO>): void {
     const current = this.currentState;
+    
+    // Validation et sanitization des données
+    const sanitizedUpdate: Partial<JoueurCreateDTO> = {};
+    
+    if (update.nom !== undefined) {
+      const validation = ValidationService.validateCharacterName(update.nom);
+      if (validation.valid) {
+        sanitizedUpdate.nom = ValidationService.sanitizeString(update.nom);
+      } else {
+        this.updateState({ error: validation.error });
+        return;
+      }
+    }
+    
+    if (update.apparence) {
+      sanitizedUpdate.apparence = { ...current.characterData.apparence, ...update.apparence };
+      
+      // Validation des couleurs RGB
+      if (update.apparence.couleur_peau) {
+        const colorValidation = ValidationService.validateRGBColor(update.apparence.couleur_peau);
+        if (!colorValidation.valid) {
+          this.updateState({ error: colorValidation.error });
+          return;
+        }
+      }
+      
+      if (update.apparence.couleur_cheveux) {
+        const colorValidation = ValidationService.validateRGBColor(update.apparence.couleur_cheveux);
+        if (!colorValidation.valid) {
+          this.updateState({ error: colorValidation.error });
+          return;
+        }
+      }
+      
+      if (update.apparence.couleur_yeux) {
+        const colorValidation = ValidationService.validateRGBColor(update.apparence.couleur_yeux);
+        if (!colorValidation.valid) {
+          this.updateState({ error: colorValidation.error });
+          return;
+        }
+      }
+    }
+    
+    if (update.job_initial !== undefined) {
+      const validJobs = ['guerrier', 'mage', 'archer', 'voleur', 'clerc'];
+      if (!validJobs.includes(update.job_initial)) {
+        this.updateState({ error: 'Job sélectionné invalide' });
+        return;
+      }
+      sanitizedUpdate.job_initial = update.job_initial;
+    }
+    
+    // Nettoyer l'erreur si les données sont valides
+    this.updateState({ error: null });
+    
     this.updateState({
-      characterData: { ...current.characterData, ...update }
+      characterData: { ...current.characterData, ...sanitizedUpdate }
     });
   }
 

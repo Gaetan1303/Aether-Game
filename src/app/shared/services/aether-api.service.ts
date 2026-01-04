@@ -17,7 +17,7 @@ import {
 })
 export class AetherApiService {
   private http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:8080/aether/v2'; // Mise à jour vers la nouvelle version de l'endpoint
+  private readonly baseUrl = 'http://localhost:8080/aether/v1'; // Correction : retour à la version 1 de l'API
   private readonly systemUrl = 'http://localhost:8080';
 
   // États réactifs
@@ -238,7 +238,7 @@ export class AetherApiService {
       }
     }
 
-    console.error('🔥 Erreur API Aether:', {
+    console.error('Erreur API Aether:', {
       status: error.status,
       message: errorMessage,
       fullError: error

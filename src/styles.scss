@@ -1,26 +1,30 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 @use './styles/components/buttons';
+@use './styles/blocks-system';
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
 html, body {
   height: 100%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #1a1a1a;
+  background: #1a1a1a;
   color: $text;
   overflow: hidden; // Pour éviter le scroll pendant le jeu
+  display: flex;
+  flex-direction: column;
 }
 
 // Styles globaux pour l'application
 app-root {
-  display: block;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
+  align-items: stretch;
+  justify-content: stretch;
 }
 
 // Styles pour les éléments de jeu
@@ -66,7 +70,46 @@ app-root {
 }
 
 // Classes utilitaires
-.text-center { text-align: center; }
+.text-center { 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// CLASSES UTILITAIRES DE CENTRAGE (sans margin/border/padding)
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-center {
+  display: grid;
+  place-items: center;
+  place-content: center;
+}
+
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.container-center {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 

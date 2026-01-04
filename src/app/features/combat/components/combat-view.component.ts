@@ -190,27 +190,64 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
   
   private handleCombatStarted(event: any): void {
     console.log('Combat started:', event);
-    // TODO: Initialiser l'état du combat
+    // Initialiser l'état du combat
+    this.combatService.startCombat(event.participants || []);
+    this.isCombatActive.set(true);
+    this.currentTurn.set(1);
   }
   
   private handleTurnStarted(event: any): void {
     console.log('Turn started:', event);
-    // TODO: Mettre à jour l'unité active
+    // Mettre à jour l'unité active
+    if (event.activeUnit) {
+      this.selectedUnit.set(event.activeUnit);
+      // Centrer la caméra sur l'unité active
+      this.cameraService.followTarget(event.activeUnit.position);
+    }
+    this.currentTurn.set(event.turnNumber || this.currentTurn() + 1);
   }
   
   private handleDamageApplied(event: any): void {
     console.log('Damage applied:', event);
-    // TODO: Jouer l'animation de dégâts
+    // Jouer l'animation de dégâts
+    if (event.targetId && event.damage) {
+      this.animationQueue.enqueue({
+        type: 'damage',
+        targetId: event.targetId,
+        data: { damage: event.damage, damageType: event.damageType || 'physical' },
+        duration: 800
+      });
+    }
   }
   
   private handleUnitMoved(event: any): void {
     console.log('Unit moved:', event);
-    // TODO: Animer le déplacement de l'unité
+    // Animer le déplacement de l'unité
+    if (event.unitId && event.fromPosition && event.toPosition) {
+      this.animationQueue.enqueue({
+        type: 'movement',
+        targetId: event.unitId,
+        data: { 
+          from: event.fromPosition, 
+          to: event.toPosition,
+          path: event.path || [event.fromPosition, event.toPosition]
+        },
+        duration: 1000
+      });
+    }
   }
   
   private handleCombatEnded(event: any): void {
     console.log('Combat ended:', event);
-    // TODO: Afficher l'écran de fin de combat
+    // Afficher l'écran de fin de combat
+    this.isCombatActive.set(false);
+    this.combatResult.set({
+      winner: event.winner || 'unknown',
+      experience: event.experience || 0,
+      rewards: event.rewards || [],
+      statistics: event.statistics || {}
+    });
+    this.showCombatResult.set(true);
   }
   
   private createTestBattle(): void {

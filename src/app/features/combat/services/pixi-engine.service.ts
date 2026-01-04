@@ -93,16 +93,59 @@ export class PixiEngineService {
     this.app.ticker.maxFPS = 60;
     this.app.ticker.minFPS = 30;
     
-    // TODO: Ajouter des callbacks de mise à jour ici
+    // Ajouter des callbacks de mise à jour ici
     this.app.ticker.add((deltaTime) => {
       this.update(deltaTime.deltaTime);
+      // Notification aux services dépendants
+      this.updateCallbacks.forEach(callback => {
+        try {
+          callback(deltaTime.deltaTime);
+        } catch (error) {
+          console.warn('Erreur dans callback de mise à jour:', error);
+        }
+      });
     });
   }
 
   private update(deltaTime: number): void {
-    // TODO: Mettre à jour les animations
-    // TODO: Mettre à jour les particules
-    // TODO: Nettoyer les objets obsolètes
+    // Mettre à jour les animations
+    this.updateAnimations(deltaTime);
+    // Mettre à jour les particules (si implémenté)
+    this.updateParticles(deltaTime);
+    // Nettoyer les objets obsolètes
+    this.cleanup();
+  }
+
+  private updateCallbacks: ((deltaTime: number) => void)[] = [];
+  
+  registerUpdateCallback(callback: (deltaTime: number) => void): void {
+    this.updateCallbacks.push(callback);
+  }
+  
+  private updateAnimations(deltaTime: number): void {
+    // Mise à jour basique des animations PIXI
+    if (this.app?.stage) {
+      this.app.stage.children.forEach(child => {
+        if (child.alpha < 1 && child.visible) {
+          // Animation fade-in simple
+          child.alpha = Math.min(1, child.alpha + deltaTime * 0.02);
+        }
+      });
+    }
+  }
+  
+  private updateParticles(deltaTime: number): void {
+    // Placeholder pour le système de particules futur
+  }
+  
+  private cleanup(): void {
+    // Nettoie les objets invisibles ou détruits
+    if (this.app?.stage) {
+      const toRemove = this.app.stage.children.filter(child => 
+        child.alpha <= 0 || (child as any).isDestroyed
+      );
+      toRemove.forEach(child => this.app!.stage.removeChild(child));
+    }
   }
 
   private handleResize(): void {

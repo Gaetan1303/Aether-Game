@@ -55,3 +55,6 @@ pnpm-debug.log*
 
 # Output
 out/
+
+# Assets (images, sons, etc)
+assets/
