@@ -1,18 +1,24 @@
 <div class="game-container">
   <!-- Menu principal Final Fantasy Tactics -->
   <div class="main-menu" *ngIf="isHomePage()">
+    <!-- Bannières latérales -->
+    <div class="banner-decorations">
+      <img src="assets/images/banner-left.png" alt="Bannière gauche" class="banner-left" />
+      <img src="assets/images/banner-right.png" alt="Bannière droite" class="banner-right" />
+    </div>
+    
     <div class="menu-content">
       <!-- Titre du jeu dans une div séparée -->
       <div class="game-title-section">
         <div class="menu-title" [class.animated]="titleAnimation()">AETHER ENGINE</div>
         <div class="menu-subtitle">~ TACTICAL CHRONICLES ~</div>
       </div>
-      
+
       <!-- Image sous le titre -->
       <div class="game-image-section">
         <img src="assets/images/menu-banner.png" alt="Bannière menu principal" class="menu-banner" />
       </div>
-      
+    
       <!-- Menu principal sous l'image -->
       <div class="menu-buttons">
         <button [routerLink]="['/nouvelle-partie']" class="menu-btn">Nouvelle partie</button>
@@ -20,7 +26,7 @@
         <button [routerLink]="['/options']" class="menu-btn">Options</button>
         <button [routerLink]="['/quitter']" class="menu-btn">Quitter</button>
       </div>
-      
+
       <div class="menu-footer">
         <div class="api-status" [class.connected]="isApiConnected()" [class.disconnected]="!isApiConnected()">
           {{ isApiConnected() ? '🟢 Serveur connecté' : '🔴 Serveur déconnecté' }}

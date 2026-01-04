@@ -1,8 +1,10 @@
 @use '../styles/components/buttons';
 
 // FF TACTICS ADVANCE AUTHENTIC COLORS
-$gold: #c9a876; $gold-light: #e6c589; $gold-dark: #a08751; $brown: #1a1003; $brown-med: #2d1b0a; $brown-light: #4a3218; $brown-lighter: #6b4a32;
-$text: #f8f4e8; $text-accent: #d4af37; $text-muted: #a08751; $border-gold: #d4af37; $border-dark: #1a1003; $shadow: #000000;
+$gold: #c9a876; $gold-light: #e6c589; $gold-dark: #a08751; 
+$brown: #1a1003; $brown-dark: #0d0701; $brown-med: #2d1b0a; $brown-light: #4a3218; $brown-lighter: #6b4a32;
+$text: #f8f4e8; $text-accent: #d4af37; $text-muted: #a08751; 
+$border-gold: #d4af37; $border-dark: #1a1003; $shadow: #000000;
 $blue: #2c5aa0; $blue-dark: #1e3f73; $blue-light: #4a7bc8; $blue-bright: #6fa8f5;
 $red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
 
@@ -78,15 +80,17 @@ $red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
   width: 100%; 
   height: 100vh; 
   background: 
-    radial-gradient(circle at 25% 25%, rgba($gold, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba($blue-dark, 0.06) 0%, transparent 50%),
-    linear-gradient(135deg, 
-      $shadow 0%, 
-      color-mix(in srgb, $brown, $shadow 70%) 25%,
-      color-mix(in srgb, $brown-med, $shadow 50%) 50%,
-      color-mix(in srgb, $brown, $shadow 70%) 75%,
-      $shadow 100%
-    );
+    linear-gradient(
+      rgba($shadow, 0.6) 0%,
+      rgba($brown-dark, 0.4) 25%,
+      rgba($brown, 0.3) 50%,
+      rgba($brown-dark, 0.4) 75%,
+      rgba($shadow, 0.6) 100%
+    ),
+    url('../assets/images/bg-castle.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   font-family: 'Courier New', 'MS Gothic', monospace; 
   color: $text; 
   overflow: hidden; 
@@ -101,26 +105,65 @@ $red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
   height: 100vh;
   width: 100vw;
   background: 
-    radial-gradient(ellipse at center, 
-      rgba($gold, 0.03) 0%, 
-      rgba($brown-light, 0.05) 30%,
-      transparent 70%
-    );
+    linear-gradient(
+      rgba($shadow, 0.7) 0%,
+      rgba($brown, 0.8) 25%,
+      rgba($brown-light, 0.6) 50%,
+      rgba($brown, 0.8) 75%,
+      rgba($shadow, 0.7) 100%
+    ),
+    url('../assets/images/bg-castle.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   position: relative;
   gap: 40px;
   
   &::before {
     content: '';
     position: absolute;
-    top: 20%; left: 10%; right: 10%; bottom: 20%;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: 
-      repeating-conic-gradient(
-        from 0deg at 50% 50%,
-        transparent 0deg,
-        rgba($gold, 0.01) 1deg,
-        transparent 2deg
+      radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        rgba($shadow, 0.3) 60%,
+        rgba($shadow, 0.6) 100%
       );
     pointer-events: none;
+  }
+  
+  // Bannières décoratives
+  .banner-decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    
+    .banner-left {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 60vh;
+      width: auto;
+      opacity: 0.8;
+      filter: drop-shadow(0 4px 16px rgba($shadow, 0.6));
+    }
+    
+    .banner-right {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 60vh;
+      width: auto;
+      opacity: 0.8;
+      filter: drop-shadow(0 4px 16px rgba($shadow, 0.6));
+    }
   }
   
   .menu-content {
@@ -131,6 +174,17 @@ $red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
     gap: 40px;
     max-width: 800px;
     width: 100%;
+    position: relative;
+    z-index: 2;
+    background: 
+      radial-gradient(
+        ellipse at center,
+        rgba($brown, 0.4) 0%,
+        rgba($brown-light, 0.2) 40%,
+        transparent 70%
+      );
+    border-radius: 20px;
+    backdrop-filter: blur(2px);
   }
   
   // Section titre du jeu
@@ -199,15 +253,18 @@ $red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
     max-width: 400px;
     background: 
       linear-gradient(145deg, 
-        rgba($brown, 0.6) 0%, 
-        rgba($brown-light, 0.4) 50%,
-        rgba($brown, 0.6) 100%
+        rgba($brown-dark, 0.9) 0%, 
+        rgba($brown, 0.7) 25%,
+        rgba($brown-light, 0.5) 50%,
+        rgba($brown, 0.7) 75%,
+        rgba($brown-dark, 0.9) 100%
       );
-    border-radius: 8px;
+    border: 2px solid rgba($gold, 0.3);
+    border-radius: 12px;
     box-shadow: 
-      0 8px 32px rgba($shadow, 0.6),
-      inset 1px 1px 0 rgba($gold-light, 0.1),
-      inset -1px -1px 0 rgba($shadow, 0.3);
+      0 12px 40px rgba($shadow, 0.8),
+      inset 2px 2px 4px rgba($gold-light, 0.1),
+      inset -2px -2px 4px rgba($shadow, 0.4);
   }
   
   .menu-btn { 
