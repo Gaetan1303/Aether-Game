@@ -150,8 +150,9 @@ $red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
       transform: translateY(-50%);
       height: 60vh;
       width: auto;
-      opacity: 0.8;
+      opacity: 1;
       filter: drop-shadow(0 4px 16px rgba($shadow, 0.6));
+      z-index: 1; // Ensure it is above drapeau-left
     }
     
     .banner-right {
@@ -163,6 +164,31 @@ $red: #8b1538; $red-dark: #5d0e25; $red-light: #b8376b; $red-bright: #e85a8a;
       width: auto;
       opacity: 0.8;
       filter: drop-shadow(0 4px 16px rgba($shadow, 0.6));
+      z-index: 1; // Ensure it is above drapeau-right
+    }
+    
+    .drapeau-left {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 62vh; // Slightly larger
+      width: auto;
+      opacity: 0.8; // Increased opacity
+      pointer-events: none;
+      z-index: 0; // Ensure it is below banner-left
+    }
+    
+    .drapeau-right {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 62vh; // Slightly larger
+      width: auto;
+      opacity: 0.6; // Increased opacity
+      pointer-events: none;
+      z-index: 0; // Ensure it is below banner-right
     }
   }
   
