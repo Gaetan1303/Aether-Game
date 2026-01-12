@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { GameStateService } from '@core/services/game-state.service';
 import { AuthService } from '@core/services/auth.service';
+import { PlayerStatsService } from '@core/services/player-stats.service';
 import { AetherApiService } from './shared/services/aether-api.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private aetherApi = inject(AetherApiService);
+  private playerStatsService = inject(PlayerStatsService);
   
   // Signaux Angular pour la réactivité
   gameState = this.gameStateService.getGameState();
@@ -32,15 +34,17 @@ export class AppComponent implements OnInit {
   // Signal pour l'animation du titre
   titleAnimation = signal<boolean>(false);
   
-  // Signal pour le gold du joueur (simulation)
-  currentGold = signal<number>(500);
+  // Accès aux stats du joueur via le service
+  readonly stats = this.playerStatsService.stats;
+  readonly hpPercentage = this.playerStatsService.hpPercentage;
+  readonly mpPercentage = this.playerStatsService.mpPercentage;
   
-  // Signal pour le niveau du joueur (simulation)
-  playerLevel = signal<number>(1);
-  
-  // Signal pour les stats du joueur
-  playerHP = signal<{ current: number, max: number }>({ current: 85, max: 120 });
-  playerMP = signal<{ current: number, max: number }>({ current: 45, max: 60 });
+  // Computed pour extraire les valeurs individuelles (compatibilité template)
+  currentGold = computed(() => this.stats().gold);
+  playerLevel = computed(() => this.stats().level);
+  playerName = computed(() => this.stats().name);
+  playerHP = computed(() => this.stats().hp);
+  playerMP = computed(() => this.stats().mp);
 
   // Navigation disponible seulement si pas en combat et authentifié
   canNavigate = computed(() => 
@@ -53,19 +57,6 @@ export class AppComponent implements OnInit {
   
   // Vérifier si on est sur la page d'accueil pour afficher le menu principal
   isHomePage = computed(() => this.currentUrl() === '/' || this.currentUrl() === '');
-  
-  // Computed pour le pourcentage de HP
-  hpPercentage = computed(() => 
-    (this.playerHP().current / this.playerHP().max) * 100
-  );
-  
-  // Computed pour le pourcentage de MP
-  mpPercentage = computed(() => 
-    (this.playerMP().current / this.playerMP().max) * 100
-  );
-  
-  // Computed pour le nom du joueur (simulation)
-  playerName = computed(() => 'Aragorn');
 
   constructor() {
     // Initialiser l'URL courante
@@ -87,18 +78,6 @@ export class AppComponent implements OnInit {
         setTimeout(() => this.titleAnimation.set(true), 500);
       }
     });
-    
-    // Effect pour simuler la régénération de MP
-    effect(() => {
-      const interval = setInterval(() => {
-        this.playerMP.update(mp => ({
-          ...mp,
-          current: Math.min(mp.max, mp.current + 1)
-        }));
-      }, 5000);
-      
-      return () => clearInterval(interval);
-    });
   }
 
   ngOnInit(): void {
@@ -111,19 +90,12 @@ export class AppComponent implements OnInit {
     console.log('Current Gold:', this.currentGold());
   }
   
-  // Méthode pour simuler la perte de HP (pour tester la barre)
+  // Méthodes déléguées au service
   takeDamage(amount: number): void {
-    this.playerHP.update(hp => ({
-      ...hp,
-      current: Math.max(0, hp.current - amount)
-    }));
+    this.playerStatsService.takeDamage(amount);
   }
   
-  // Méthode pour simuler l'utilisation de MP
   useMana(amount: number): void {
-    this.playerMP.update(mp => ({
-      ...mp,
-      current: Math.max(0, mp.current - amount)
-    }));
+    this.playerStatsService.useMana(amount);
   }
 }

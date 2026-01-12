@@ -1,0 +1,30 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.banner-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  
+  .banner-left {
+    @include decorative-banner(left, 1);
+    opacity: 1;
+  }
+  
+  .banner-right {
+    @include decorative-banner(right, 1);
+  }
+  
+  .drapeau-left {
+    @include decorative-flag(left);
+    opacity: 0.8;
+  }
+  
+  .drapeau-right {
+    @include decorative-flag(right);
+  }
+}

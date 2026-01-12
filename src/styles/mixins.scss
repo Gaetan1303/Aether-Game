@@ -1,5 +1,103 @@
 @use 'variables' as *;
 
+// ============================================
+// FF TACTICS MIXINS
+// ============================================
+
+// Mixin pour les bordures style FFT
+@mixin border-fft {
+  box-shadow: 
+    inset 1px 1px 0 rgba($gold-light, 0.8),
+    inset -1px -1px 0 rgba($border-dark, 0.6),
+    0 3px 6px rgba($shadow, 0.5),
+    0 1px 0 rgba($gold-light, 0.3);
+}
+
+// Mixin pour les boutons style FFT
+@mixin btn-fft { 
+  @include border-fft; 
+  background: 
+    linear-gradient(145deg, 
+      $brown-lighter 0%, 
+      $brown-light 25%, 
+      $brown-med 75%, 
+      $brown 100%
+    );
+  color: $text-accent; 
+  font: bold 14px 'Courier New', 'MS Gothic', monospace; 
+  text-shadow: 1px 1px 0 $shadow, 1px 1px 2px rgba($shadow, 0.8); 
+  cursor: pointer; 
+  transition: all 0.12s ease; 
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 120px;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px; right: 2px; bottom: 2px;
+    background: linear-gradient(145deg, transparent 0%, rgba($gold-light, 0.1) 50%, transparent 100%);
+    pointer-events: none;
+  }
+  
+  &:hover { 
+    background: 
+      linear-gradient(145deg, 
+        $brown-lighter 0%, 
+        color-mix(in srgb, $brown-light, $gold-light 15%) 25%, 
+        color-mix(in srgb, $brown-med, $gold 10%) 75%, 
+        $brown-med 100%
+      );
+    color: $gold-light; 
+    transform: translateY(-1px) translateX(-1px); 
+    box-shadow: 
+      inset 1px 1px 0 rgba($gold-light, 0.9),
+      inset -1px -1px 0 rgba($border-dark, 0.7),
+      2px 4px 8px rgba($shadow, 0.6),
+      0 1px 0 rgba($gold-light, 0.4);
+  }
+  
+  &:active { 
+    transform: translateY(1px) translateX(1px); 
+    box-shadow: 
+      inset 2px 2px 4px rgba($shadow, 0.8),
+      inset 1px 1px 0 rgba($border-dark, 0.9); 
+  }
+}
+
+// Mixin pour les bannières décoratives
+@mixin decorative-banner($side: left, $z-index: 1) {
+  position: absolute;
+  #{$side}: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60vh;
+  width: auto;
+  opacity: 0.8;
+  filter: drop-shadow(0 4px 16px rgba($shadow, 0.6));
+  z-index: $z-index;
+}
+
+// Mixin pour les drapeaux sous les bannières
+@mixin decorative-flag($side: left) {
+  position: absolute;
+  #{$side}: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 62vh;
+  width: auto;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+// ============================================
+// LEGACY MIXINS
+// ============================================
+
 // Mixin pour les boutons de jeu
 @mixin game-button($color: $primary-color) {
   background: linear-gradient(135deg, $color, color-mix(in srgb, $color, black 15%));
