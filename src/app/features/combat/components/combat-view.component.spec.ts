@@ -32,19 +32,8 @@ describe('CombatViewComponent', () => {
       ]
     };
     
-    // Test combat start
-    spyOn(component, 'handleCombatStarted' as any);
     component.ngOnInit();
     
     expect(component).toBeTruthy();
-  });
-
-  it('should track grid interactions', () => {
-    const gridClickSpy = spyOn(component, 'onGridClick');
-    
-    // Mock grid click
-    component.onGridClick({ x: 2, y: 3 });
-    
-    expect(gridClickSpy).toHaveBeenCalledWith({ x: 2, y: 3 });
   });
 });

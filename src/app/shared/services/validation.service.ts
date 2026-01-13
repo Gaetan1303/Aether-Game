@@ -50,7 +50,7 @@ export class ValidationService {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
     if (!emailRegex.test(sanitized)) {
-      return { valid: false, error: 'Format d\\'email invalide' };
+      return { valid: false, error: "Format d'email invalide" };
     }
     
     return { valid: true };

@@ -36,6 +36,15 @@ import { JoueurCreateDTO, Job, CustomisationOptions } from '../../../../shared/i
               <p class="character-subtitle">
                 {{ getGenderLabel() }} {{ getJobLabel() }}
               </p>
+              
+              <!-- Bouton Commencer l'Aventure -->
+              <button 
+                class="commence-button"
+                (click)="startGame()">
+                <span class="commence-icon">✨</span>
+                <span class="commence-text">Commencer l'Aventure</span>
+                <span class="commence-subtitle">Que l'épopée commence !</span>
+              </button>
             </div>
           </div>
         </div>
@@ -264,6 +273,13 @@ export class SummaryStepComponent {
 
   goToStep(step: number): void {
     this.creationService.goToStep(step);
+  }
+
+  startGame(): void {
+    // Appeler la méthode du service de création pour démarrer le jeu
+    if (this.isCharacterComplete() && !this.isCreating) {
+      this.createCharacterAndStart();
+    }
   }
 
   async createCharacterAndStart(): Promise<void> {

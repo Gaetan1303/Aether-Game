@@ -1,0 +1,149 @@
+<div class="reward-container">
+  <!-- Fond -->
+  <div class="reward-background"></div>
+
+  <!-- Contenu principal -->
+  <div class="reward-content">
+    
+    <!-- Titre de victoire -->
+    <div class="victory-banner">
+      <h1 class="victory-title">🏆 VICTOIRE ! 🏆</h1>
+      <p class="victory-subtitle">Quête terminée avec succès</p>
+    </div>
+
+    <!-- Section des récompenses -->
+    <div class="rewards-section" *ngIf="showRewards() && reward() as rewardData">
+      
+      <!-- XP et Gold -->
+      <div class="main-rewards">
+        <div class="reward-card xp-card">
+          <div class="reward-icon">✨</div>
+          <div class="reward-info">
+            <div class="reward-label">Expérience</div>
+            <div class="reward-value">+{{ totalXP() }} XP</div>
+          </div>
+        </div>
+
+        <div class="reward-card gold-card">
+          <div class="reward-icon">💰</div>
+          <div class="reward-info">
+            <div class="reward-label">Or</div>
+            <div class="reward-value">+{{ rewardData.gold }} G</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items obtenus -->
+      <div class="items-section" *ngIf="rewardData.items && rewardData.items.length > 0">
+        <h3 class="section-title">Items obtenus</h3>
+        <div class="items-grid">
+          <div 
+            *ngFor="let item of rewardData.items" 
+            class="item-card"
+            [style.border-color]="getItemRarityColor(item)">
+            <div class="item-icon">
+              <img 
+                [src]="'assets/images/items/' + item.icon + '.png'" 
+                [alt]="item.name"
+                (error)="onImageError($event)"
+              />
+              <span class="item-quantity" *ngIf="item.quantity > 1">×{{ item.quantity }}</span>
+            </div>
+            <div class="item-name" [style.color]="getItemRarityColor(item)">
+              {{ item.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Réputation -->
+      <div class="reputation-section" *ngIf="rewardData.reputation && rewardData.reputation.length > 0">
+        <h3 class="section-title">Réputation</h3>
+        <div class="reputation-list">
+          <div *ngFor="let rep of rewardData.reputation" class="reputation-item">
+            <span class="faction-name">{{ rep.faction }}</span>
+            <span class="rep-value">+{{ rep.amount }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistiques du combat -->
+    <div class="statistics-section" *ngIf="showStatistics() && statistics() as stats">
+      <h3 class="section-title">Statistiques du combat</h3>
+      
+      <!-- Grade de performance -->
+      <div class="performance-grade" *ngIf="getGrade() as grade">
+        <div class="grade-badge" [style.color]="grade.color">
+          <span class="grade-letter">{{ grade.grade }}</span>
+        </div>
+        <div class="grade-label">{{ grade.label }}</div>
+      </div>
+
+      <!-- Stats détaillées -->
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Ennemis vaincus</span>
+          <span class="stat-value">{{ stats.enemiesDefeated }}</span>
+        </div>
+        
+        <div class="stat-item">
+          <span class="stat-label">Dégâts infligés</span>
+          <span class="stat-value">{{ stats.damageDealt }}</span>
+        </div>
+        
+        <div class="stat-item">
+          <span class="stat-label">Dégâts reçus</span>
+          <span class="stat-value">{{ stats.damageTaken }}</span>
+        </div>
+        
+        <div class="stat-item">
+          <span class="stat-label">Tours joués</span>
+          <span class="stat-value">{{ stats.turnsPlayed }}</span>
+        </div>
+        
+        <div class="stat-item">
+          <span class="stat-label">Précision</span>
+          <span class="stat-value">{{ stats.accuracy }}%</span>
+        </div>
+        
+        <div class="stat-item">
+          <span class="stat-label">Coups critiques</span>
+          <span class="stat-value">{{ stats.criticalHits }}</span>
+        </div>
+        
+        <div class="stat-item">
+          <span class="stat-label">Temps écoulé</span>
+          <span class="stat-value">{{ formatTime(stats.timeElapsed) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification de level up -->
+    <div class="level-up-banner" *ngIf="showLevelUp() && result()?.leveledUp">
+      <div class="level-up-content">
+        <div class="level-up-icon">⭐</div>
+        <h2 class="level-up-title">NIVEAU SUPÉRIEUR !</h2>
+        <div class="level-progression">
+          <span class="old-level">Niv. {{ result()?.previousLevel }}</span>
+          <span class="arrow">→</span>
+          <span class="new-level">Niv. {{ result()?.newLevel }}</span>
+        </div>
+        <p class="level-up-message">Vos statistiques ont augmenté !</p>
+      </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="action-buttons" *ngIf="animationComplete()">
+      <button class="action-btn continue-btn" (click)="continue()">
+        <span class="btn-icon">🏠</span>
+        <span class="btn-text">Retour au menu</span>
+      </button>
+      
+      <button class="action-btn replay-btn" (click)="playAgain()">
+        <span class="btn-icon">🔄</span>
+        <span class="btn-text">Nouvelle quête</span>
+      </button>
+    </div>
+  </div>
+</div>

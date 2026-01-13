@@ -1,6 +1,8 @@
+<!-- Wrapper principal -->
+<ng-container *ngIf="{ state: state$ | async, steps: steps$ | async, connected: isConnected$ | async } as vm">
+
 <!-- Container principal de création -->
-<div class="character-creation-container" 
-     *ngIf="{ state: state$ | async, steps: steps$ | async, connected: isConnected$ | async } as vm">
+<div class="character-creation-container">
   
   <!-- En-tête avec progression -->
   <div class="creation-header">
@@ -84,47 +86,33 @@
     </app-class-step>
 
     <!-- Étape 5: Résumé et validation -->
-    <app-summary-step 
-      *ngIf="vm.state!.currentStep === 5"
-      [characterData]="vm.state!.characterData"
-      [customizationOptions]="vm.state!.customizationOptions">
-    </app-summary-step>
-  </div>
+    <div *ngIf="vm.state!.currentStep === 5" class="final-step-container">
+      
+      <!-- Bouton Commencer en haut -->
+      <div class="hero-action">
+        <div class="character-final-preview">
+          <h2 class="hero-title">
+            <span class="hero-icon">🏰</span>
+            {{ vm.state!.characterData.nom }}
+            <span class="hero-class">{{ vm.state!.characterData.job_initial || 'Aventurier' }}</span>
+          </h2>
+        </div>
+        <button 
+          class="commence-button"
+          (click)="createCharacterAndStartGame()"
+          [disabled]="vm.state!.isLoading || !canGoNext()">
+          <span class="commence-icon">✨</span>
+          <span class="commence-text">Commencer l'Aventure</span>
+          <span class="commence-subtitle">Que l'épopée commence !</span>
+        </button>
+      </div>
 
-  <!-- Navigation globale -->
-  <div class="creation-navigation" *ngIf="!vm.state!.isLoading">
-    
-    <!-- Bouton gauche -->
-    <button 
-      class="nav-button secondary"
-      (click)="vm.state!.currentStep === 1 ? cancelCreation() : previousStep()"
-      [disabled]="vm.state!.isLoading">
-      <span class="button-icon">{{ vm.state!.currentStep === 1 ? '🏠' : '←' }}</span>
-      <span class="button-text">{{ vm.state!.currentStep === 1 ? 'Menu Principal' : 'Précédent' }}</span>
-    </button>
-    
-    <!-- Informations centrales -->
-    <div class="nav-center">
-      <!-- Bouton recommencer (visible après l'étape 1) -->
-      <button 
-        *ngIf="vm.state!.currentStep > 1"
-        class="nav-button tertiary"
-        (click)="restartCreation()"
-        [disabled]="vm.state!.isLoading">
-        <span class="button-icon">🔄</span>
-        <span class="button-text">Recommencer</span>
-      </button>
+      <!-- Contenu du résumé -->
+      <app-summary-step 
+        [characterData]="vm.state!.characterData"
+        [customizationOptions]="vm.state!.customizationOptions">
+      </app-summary-step>
     </div>
-    
-    <!-- Bouton droit -->
-    <button 
-      class="nav-button primary"
-      [disabled]="!canGoNext() && vm.state!.currentStep < 5"
-      [class.create-button]="vm.state!.currentStep === 5"
-      (click)="vm.state!.currentStep === 5 ? createCharacterAndStartGame() : nextStep()">
-      <span class="button-icon">{{ vm.state!.currentStep === 5 ? '🎮' : '→' }}</span>
-      <span class="button-text">{{ vm.state!.currentStep === 5 ? 'Créer & Jouer !' : 'Suivant' }}</span>
-    </button>
   </div>
   
   <!-- Debug info (seulement en dev) -->
@@ -135,6 +123,44 @@
     </details>
   </div>
 </div>
+
+<!-- Navigation globale (en dehors du conteneur scrollable) -->
+<div class="bottom-navigation" *ngIf="!vm.state!.isLoading">
+  
+  <!-- Bouton gauche -->
+  <button 
+    class="nav-button secondary"
+    (click)="vm.state!.currentStep === 1 ? cancelCreation() : previousStep()"
+    [disabled]="vm.state!.isLoading">
+    <span class="button-icon">{{ vm.state!.currentStep === 1 ? '🏠' : '←' }}</span>
+    <span class="button-text">{{ vm.state!.currentStep === 1 ? 'Menu Principal' : 'Précédent' }}</span>
+  </button>
+  
+  <!-- Informations centrales -->
+  <div class="nav-center">
+    <!-- Bouton recommencer (visible après l'étape 1) -->
+    <button 
+      *ngIf="vm.state!.currentStep > 1"
+      class="nav-button tertiary"
+      (click)="restartCreation()"
+      [disabled]="vm.state!.isLoading">
+      <span class="button-icon">🔄</span>
+      <span class="button-text">Recommencer</span>
+    </button>
+  </div>
+  
+  <!-- Bouton droit -->
+  <button 
+    class="nav-button primary"
+    [disabled]="!canGoNext() && vm.state!.currentStep < 5"
+    [class.create-button]="vm.state!.currentStep === 5"
+    (click)="vm.state!.currentStep === 5 ? createCharacterAndStartGame() : nextStep()">
+    <span class="button-icon">{{ vm.state!.currentStep === 5 ? '🎮' : '→' }}</span>
+    <span class="button-text">{{ vm.state!.currentStep === 5 ? 'Créer & Jouer !' : 'Suivant' }}</span>
+  </button>
+</div>
+
+</ng-container>
 
 <!-- Message de chargement initial -->
 <div class="initial-loading" *ngIf="!(state$ | async)">

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, Subject, takeUntil, combineLatest } from 'rxjs';
 import { CharacterCreationService } from '../../../shared/services/character-creation.service';
 import { AetherApiService } from '../../../shared/services/aether-api.service';
+import { GameFlowService } from '../../../core/services/game-flow.service';
 import { 
   CharacterCreationState, 
   CharacterCreationStep,
@@ -36,6 +37,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   private router: Router = inject(Router);
   public creationService: CharacterCreationService = inject(CharacterCreationService);
   private apiService: AetherApiService = inject(AetherApiService);
+  private gameFlowService: GameFlowService = inject(GameFlowService);
 
   // États observables
   state$: Observable<CharacterCreationState> = this.creationService.state$;
@@ -133,8 +135,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       if (!characterData) {
         throw new Error('Données de personnage incomplètes');
       }
-
-      console.log('Création du personnage:', characterData);
+✨ Création du personnage:', characterData);
 
       // Créer le personnage via l'API
       let createdCharacter: JoueurResponseDTO | undefined;
@@ -142,7 +143,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         // Essayer l'endpoint RESTful en premier
         createdCharacter = await this.apiService.createCharacter(characterData).toPromise();
       } catch (error) {
-        console.log('Fallback vers l\'endpoint legacy');
+        console.log('⚠️ Fallback vers l\'endpoint legacy');
         // Fallback vers l'endpoint legacy
         createdCharacter = await this.apiService.createCharacterLegacy(characterData).toPromise();
       }
@@ -153,16 +154,13 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
 
       console.log('✅ Personnage créé:', createdCharacter);
 
-      // Démarrer le premier combat
-      const combatResult = await this.apiService.startFirstCombat(createdCharacter.id).toPromise();
-      console.log('🎯 Premier combat démarré:', combatResult);
+      // Démarrer une nouvelle session de jeu avec GameFlowService
+      this.gameFlowService.startNewSession(
+        characterData.nom,
+        characterData.job_initial || 'Guerrier'
+      );
 
-      // Redirection vers le jeu
-      this.router.navigate(['/game'], {
-        queryParams: { 
-          character: createdCharacter.id,
-          newPlayer: 'true'
-        }
+      // GameFlowService va gérer la navigation automatiquement vers /story
       });
 
     } catch (error: any) {

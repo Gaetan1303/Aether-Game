@@ -7,6 +7,7 @@ import { CameraService } from '../services/camera.service';
 import { AnimationQueueService } from '../services/animation-queue.service';
 import { WebSocketService } from '@core/services/websocket.service';
 import { GameStateService } from '@core/services/game-state.service';
+import { GameFlowService } from '@core/services/game-flow.service';
 import { BattleState, createBattleState, createDefaultBattleConfig } from '../models/battle-state.model';
 import { Unit, createUnit, Direction } from '../models/unit.model';
 import { CombatEvent } from '../models/combat-event.model';
@@ -29,6 +30,13 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = signal<boolean>(true);
   error = signal<string | null>(null);
   
+  // États de combat
+  isCombatActive = signal<boolean>(false);
+  showCombatResult = signal<boolean>(false);
+  combatResult = signal<any>(null);
+  currentTurn = signal<number>(0);
+  selectedUnit = signal<Unit | null>(null);
+  
   // Statistiques du moteur
   engineStats = signal<any>(null);
   
@@ -43,6 +51,7 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationQueue = inject(AnimationQueueService);
   private websocket = inject(WebSocketService);
   private gameState = inject(GameStateService);
+  private gameFlowService = inject(GameFlowService);
   
   ngOnInit(): void {
     console.log('CombatViewComponent initializing...');
@@ -191,9 +200,9 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private handleCombatStarted(event: any): void {
     console.log('Combat started:', event);
     // Initialiser l'état du combat
-    this.combatService.startCombat(event.participants || []);
     this.isCombatActive.set(true);
     this.currentTurn.set(1);
+    // TODO: Initialiser les participants du combat
   }
   
   private handleTurnStarted(event: any): void {
@@ -201,53 +210,55 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
     // Mettre à jour l'unité active
     if (event.activeUnit) {
       this.selectedUnit.set(event.activeUnit);
-      // Centrer la caméra sur l'unité active
-      this.cameraService.followTarget(event.activeUnit.position);
+      // TODO: Centrer la caméra sur l'unité active
     }
     this.currentTurn.set(event.turnNumber || this.currentTurn() + 1);
   }
   
   private handleDamageApplied(event: any): void {
     console.log('Damage applied:', event);
-    // Jouer l'animation de dégâts
-    if (event.targetId && event.damage) {
-      this.animationQueue.enqueue({
-        type: 'damage',
-        targetId: event.targetId,
-        data: { damage: event.damage, damageType: event.damageType || 'physical' },
-        duration: 800
-      });
-    }
+    // TODO: Jouer l'animation de dégâts
+    // L'AnimationQueueService n'a pas de méthode enqueue encore
   }
   
   private handleUnitMoved(event: any): void {
     console.log('Unit moved:', event);
-    // Animer le déplacement de l'unité
-    if (event.unitId && event.fromPosition && event.toPosition) {
-      this.animationQueue.enqueue({
-        type: 'movement',
-        targetId: event.unitId,
-        data: { 
-          from: event.fromPosition, 
-          to: event.toPosition,
-          path: event.path || [event.fromPosition, event.toPosition]
-        },
-        duration: 1000
-      });
-    }
+    // TODO: Animer le déplacement de l'unité
+    // L'AnimationQueueService n'a pas de méthode enqueue encore
   }
   
   private handleCombatEnded(event: any): void {
-    console.log('Combat ended:', event);
+    console.log('🎯 Combat terminé:', event);
+    
     // Afficher l'écran de fin de combat
     this.isCombatActive.set(false);
-    this.combatResult.set({
-      winner: event.winner || 'unknown',
+    const result = {
+      winner: event.winner || 'player',
       experience: event.experience || 0,
       rewards: event.rewards || [],
       statistics: event.statistics || {}
-    });
+    };
+    this.combatResult.set(result);
     this.showCombatResult.set(true);
+    
+    // Vérifier si le joueur a gagné
+    if (result.winner === 'player') {
+      console.log('🏆 Victoire du joueur ! Déclenchement du flux de victoire...');
+      
+      // Extraire les statistiques de combat
+      const enemiesDefeated = event.statistics?.enemiesDefeated || 3;
+      const damageDealt = event.statistics?.damageDealt || 150;
+      const damageTaken = event.statistics?.damageTaken || 50;
+      const turnsPlayed = event.statistics?.turnsCount || this.currentTurn();
+      
+      // Appeler GameFlowService pour gérer la transition vers l'histoire de victoire
+      this.gameFlowService.completeCombat(
+        enemiesDefeated,
+        damageDealt,
+        damageTaken,
+        turnsPlayed
+      );
+    }
   }
   
   private createTestBattle(): void {

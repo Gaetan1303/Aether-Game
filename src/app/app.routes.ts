@@ -8,6 +8,27 @@ export const routes: Routes = [
       .then(m => m.NewGameComponent)
   },
   
+  // Narration / Story
+  {
+    path: 'story',
+    loadComponent: () => import('./features/story/components/story-dialog.component')
+      .then(m => m.StoryDialogComponent)
+  },
+  
+  // Combat
+  {
+    path: 'combat',
+    loadComponent: () => import('./features/combat/components/combat-view.component')
+      .then(m => m.CombatViewComponent)
+  },
+  
+  // Récompenses
+  {
+    path: 'rewards',
+    loadComponent: () => import('./features/rewards/components/reward-panel.component')
+      .then(m => m.RewardPanelComponent)
+  },
+  
   // Continuer - Charger un personnage existant
   {
     path: 'continuer',

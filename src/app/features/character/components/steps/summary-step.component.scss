@@ -1,7 +1,6 @@
 .summary-step {
   max-width: 1000px;
-  margin: 0 auto;
-  padding: 2rem;
+  padding-bottom: 100px;
 }
 
 .step-header {
@@ -105,6 +104,104 @@
     color: #6c63ff;
     font-size: 1rem;
     font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Bouton Commencer l'Aventure
+.commence-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    #00d4aa 0%,
+    #00a085 50%,
+    #008f75 100%
+  );
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 100%
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-4px) scale(1.05);
+    
+    &::before {
+      left: 100%;
+    }
+
+    .commence-icon {
+      animation: sparkle 0.8s ease infinite;
+    }
+  }
+
+  &:active {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .commence-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+  }
+
+  .commence-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .commence-subtitle {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    font-style: italic;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+  }
+  25% { 
+    transform: scale(1.2) rotate(5deg);
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
+  }
+  50% { 
+    transform: scale(1.1) rotate(-3deg);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  }
+  75% { 
+    transform: scale(1.15) rotate(2deg);
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 1));
   }
 }
 

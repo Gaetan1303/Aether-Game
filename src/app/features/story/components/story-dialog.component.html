@@ -1,0 +1,91 @@
+<div class="story-container" *ngIf="isPlaying()">
+  <!-- Fond sombre -->
+  <div class="story-background"></div>
+
+  <!-- Contenu principal -->
+  <div class="story-content" *ngIf="currentNode() as node">
+    
+    <!-- Portrait du personnage qui parle -->
+    <div 
+      class="portrait-container" 
+      [class]="getPortraitClass(node)"
+      *ngIf="node.portrait">
+      <div class="portrait-frame">
+        <img 
+          [src]="'assets/images/portraits/' + node.portrait + '.png'" 
+          [alt]="node.speaker"
+          class="portrait-image"
+        />
+      </div>
+      <div class="speaker-name">{{ node.speaker }}</div>
+    </div>
+
+    <!-- Boîte de dialogue -->
+    <div 
+      class="dialog-box"
+      [class]="getDialogBoxClass(node)"
+      (click)="advance()">
+      
+      <!-- Nom du locuteur si pas de portrait -->
+      <div class="speaker-label" *ngIf="!node.portrait && node.speaker !== 'Narrateur'">
+        <span class="speaker-name-text">{{ node.speaker }}</span>
+      </div>
+
+      <!-- Texte du dialogue -->
+      <div class="dialog-text">
+        <p [class.narration]="node.speaker === 'Narrateur'">
+          {{ displayedText() }}
+          <span class="cursor" *ngIf="isTextAnimating()">▮</span>
+        </p>
+      </div>
+
+      <!-- Indicateur de continuation -->
+      <div class="continue-indicator" *ngIf="!isTextAnimating() && canAdvance()">
+        <span class="arrow">▼</span>
+      </div>
+
+      <!-- Choix de dialogue -->
+      <div class="dialog-choices" *ngIf="!isTextAnimating() && hasChoices()">
+        <button 
+          *ngFor="let choice of node.choices"
+          class="choice-button"
+          (click)="makeChoice(choice.id); $event.stopPropagation()">
+          {{ choice.text }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de progression de l'histoire -->
+    <div class="story-progress" *ngIf="story() as storyData">
+      <div class="progress-title">{{ storyData.title }}</div>
+      <div class="progress-bar">
+        <div 
+          class="progress-fill" 
+          [style.width.%]="((storyService.storyProgress()?.completedNodeIds?.length || 0) / (storyData.nodes.length || 1)) * 100">
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton pour passer (debug) -->
+    <button 
+      class="skip-button"
+      (click)="skipStory()"
+      title="Passer l'histoire">
+      Passer ⏩
+    </button>
+  </div>
+
+  <!-- Message de fin -->
+  <div class="story-complete" *ngIf="isComplete()">
+    <div class="complete-message">
+      <h2>✓ Histoire terminée</h2>
+      <p>Préparation du combat...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Message si pas d'histoire active -->
+<div class="no-story" *ngIf="!isPlaying()">
+  <h2>Aucune histoire en cours</h2>
+  <p>Créez un personnage pour commencer votre aventure.</p>
+</div>
