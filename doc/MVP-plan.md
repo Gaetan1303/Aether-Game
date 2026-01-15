@@ -1,34 +1,34 @@
-# 📋 Plan MVP - Démo Jouable Aether Engine
+# Plan MVP - Démo Jouable Aether Engine
 
 **Date de création** : 13 janvier 2026  
 **Objectif** : Créer une démo jouable complète avec personnage, narration, combat et récompenses
 
 ---
 
-## 🎯 Fonctionnalités MVP
+## Fonctionnalités MVP
 
-### ✅ Existant (À valider)
-1. **Création de personnage** ✓
+### Existant (À valider)
+1. **Création de personnage** 
    - Interface complète avec 5 étapes
    - Service `CharacterCreationService`
    - Composants steps (name, gender, appearance, class, summary)
    - Connexion API pour créer le personnage
 
-2. **Système de combat** ✓ (Partiellement)
+2. **Système de combat** (Partiellement)
    - Moteur PixiJS isométrique
    - Modèles de données (BattleState, Unit, CombatEvent)
    - Services (PixiEngine, IsoRenderer, SpriteManager, Camera, AnimationQueue)
    - Composant `CombatViewComponent`
    - Interface utilisateur de combat
 
-3. **Services de base** ✓
+3. **Services de base** 
    - `PlayerStatsService` (gestion stats joueur)
    - `GameStateService` (état du jeu)
    - `AuthService` (authentification)
    - `WebSocketService` (communication temps réel)
    - `AetherApiService` (API REST)
 
-### 🚧 À créer
+### À créer
 
 1. **Système de narration** 🆕
    - Service `StoryService`
@@ -55,7 +55,7 @@
 
 ---
 
-## 📊 Architecture du flux MVP
+## Architecture du flux MVP
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -67,68 +67,68 @@
 ┌─────────────────────────────────────────────────────────────┐
 │              CRÉATION DE PERSONNAGE                         │
 │         (character-creation.component)                      │
-│  • 5 étapes : Nom, Genre, Apparence, Classe, Résumé       │
+│  • 5 étapes : Nom, Genre, Apparence, Classe, Résumé         │
 └─────────────────────┬───────────────────────────────────────┘
                       │
                       ↓ Créer & Jouer
 ┌─────────────────────────────────────────────────────────────┐
-│                  INTRODUCTION NARRATIVE                      │
+│                  INTRODUCTION NARRATIVE                     │
 │              (story-dialog.component)                       │
-│  • Contexte de la quête                                    │
-│  • Présentation de l'objectif                              │
-│  • Dialogues style FFT                                     │
+│  • Contexte de la quête                                     │
+│  • Présentation de l'objectif                               │
+│  • Dialogues style FFT                                      │
 └─────────────────────┬───────────────────────────────────────┘
                       │
                       ↓ Commencer le combat
 ┌─────────────────────────────────────────────────────────────┐
 │                   COMBAT TACTIQUE                           │
 │               (combat-view.component)                       │
-│  • Grille isométrique 20x20                                │
-│  • Unités joueur vs ennemis                                │
-│  • Tour par tour                                           │
-│  • Actions : Déplacer, Attaquer, Compétence                │
+│  • Grille isométrique 20x20                                 │
+│  • Unités joueur vs ennemis                                 │
+│  • Tour par tour                                            │
+│  • Actions : Déplacer, Attaquer, Compétence                 │
 └─────────────────────┬───────────────────────────────────────┘
                       │
                       ↓ Victoire
 ┌─────────────────────────────────────────────────────────────┐
 │                 RÉCOMPENSES DE QUÊTE                        │
 │              (reward-panel.component)                       │
-│  • XP gagnée → Niveau up?                                  │
-│  • Gold obtenu                                             │
-│  • Items trouvés                                           │
-│  • Statistiques du combat                                  │
+│  • XP gagnée → Niveau up?                                   │
+│  • Gold obtenu                                              │
+│  • Items trouvés                                            │
+│  • Statistiques du combat                                   │
 └─────────────────────┬───────────────────────────────────────┘
                       │
                       ↓ Continuer
 ┌─────────────────────────────────────────────────────────────┐
 │                  MENU PRINCIPAL                             │
-│              (Retour ou Nouvelle quête)                    │
+│              (Retour ou Nouvelle quête)                     │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🗂️ Structure des fichiers à créer
+## Structure des fichiers à créer
 
 ```
 src/app/
 ├── core/
 │   └── services/
-│       ├── game-flow.service.ts         🆕 Orchestration du flux
-│       └── game-flow.service.spec.ts    🆕
+│       ├── game-flow.service.ts         Orchestration du flux
+│       └── game-flow.service.spec.ts    
 │
 ├── features/
 │   ├── story/
 │   │   ├── components/
-│   │   │   ├── story-dialog.component.ts       🆕
-│   │   │   ├── story-dialog.component.html     🆕
-│   │   │   ├── story-dialog.component.scss     🆕
-│   │   │   └── story-dialog.component.spec.ts  🆕
+│   │   │   ├── story-dialog.component.ts       
+│   │   │   ├── story-dialog.component.html     
+│   │   │   ├── story-dialog.component.scss     
+│   │   │   └── story-dialog.component.spec.ts  
 │   │   ├── models/
-│   │   │   └── story.models.ts                 🆕
+│   │   │   └── story.models.ts                 
 │   │   └── services/
-│   │       ├── story.service.ts                🆕
-│   │       └── story.service.spec.ts           🆕
+│   │       ├── story.service.ts                
+│   │       └── story.service.spec.ts           
 │   │
 │   └── rewards/
 │       ├── components/
@@ -143,7 +143,7 @@ src/app/
 │           └── quest-reward.service.spec.ts    🆕
 │
 ├── e2e/
-│   └── demo-flow.spec.ts                       🆕 Tests E2E
+│   └── demo-flow.spec.ts                       Tests E2E
 │
 └── testing/
     ├── integration/
@@ -156,7 +156,7 @@ src/app/
 
 ---
 
-## 🎮 Scénario de la démo
+## Scénario de la démo
 
 ### Acte 1 : Création du héros
 **Personnage** : Le joueur crée son héros (nom, apparence, classe)
@@ -185,7 +185,7 @@ src/app/
 
 ---
 
-## 📝 Checklist de développement
+## Checklist de développement
 
 ### Phase 1 : Systèmes de base
 - [ ] Créer `StoryService` avec gestion de dialogues
@@ -216,7 +216,7 @@ src/app/
 
 ---
 
-## 🧪 Stratégie de tests
+## Stratégie de tests
 
 ### Tests unitaires (Jasmine/Karma)
 ```typescript
@@ -262,22 +262,22 @@ describe('MVP Demo Flow', () => {
 
 ---
 
-## 📊 Métriques de succès
+## Métriques de succès
 
-- ✅ Le joueur peut créer un personnage en < 2 minutes
-- ✅ La narration s'affiche correctement et est lisible
-- ✅ Le combat se lance sans erreur
-- ✅ Les actions de combat fonctionnent (déplacement, attaque)
-- ✅ La victoire déclenche l'écran de récompenses
-- ✅ Les récompenses s'appliquent au personnage
-- ✅ Le flux complet est jouable du début à la fin
-- ✅ Tous les tests passent (unitaires, intégration, E2E)
-- ✅ Aucune erreur console critique
-- ✅ Temps de chargement < 3 secondes entre chaque écran
+- Le joueur peut créer un personnage en < 2 minutes
+- La narration s'affiche correctement et est lisible
+- Le combat se lance sans erreur
+- Les actions de combat fonctionnent (déplacement, attaque)
+- La victoire déclenche l'écran de récompenses
+- Les récompenses s'appliquent au personnage
+- Le flux complet est jouable du début à la fin
+- Tous les tests passent (unitaires, intégration, E2E)
+- Aucune erreur console critique
+- Temps de chargement < 3 secondes entre chaque écran
 
 ---
 
-## 🚀 Ordre d'exécution
+## Ordre d'exécution
 
 1. **Créer les modèles de données** (Story, Reward)
 2. **Créer les services** (StoryService, QuestRewardService, GameFlowService)
@@ -290,13 +290,13 @@ describe('MVP Demo Flow', () => {
 
 ---
 
-## 🎯 Objectif final
+## Objectif final
 
 Une démo jouable où le joueur peut :
-1. ✨ Créer un personnage unique
-2. 📖 Découvrir l'histoire de sa première quête
-3. ⚔️ Combattre des ennemis en tactique tour par tour
-4. 🏆 Obtenir des récompenses et progresser
+1. Créer un personnage unique
+2. Découvrir l'histoire de sa première quête
+3. Combattre des ennemis en tactique tour par tour
+4. Obtenir des récompenses et progresser
 
 **Temps de jeu estimé** : 10-15 minutes  
 **Rejouabilité** : Différentes classes, choix de personnage

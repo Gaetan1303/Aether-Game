@@ -47,7 +47,7 @@ export class AetherApiService {
   private checkServerStatus(): void {
     this.ping().subscribe({
       next: () => console.log('Aether API Server is ready'),
-      error: () => console.warn('⚠️ Aether API Server is not available')
+      error: () => console.warn('Aether API Server is not available')
     });
   }
 

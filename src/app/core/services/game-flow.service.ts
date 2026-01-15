@@ -79,7 +79,7 @@ export class GameFlowService {
     this.currentSession.set(session);
     this.currentPhase.set('story-intro');
     
-    console.log('✨ New game session started:', session);
+    console.log('New game session started:', session);
     
     // Sauvegarder la session
     this.saveSession();
@@ -157,7 +157,7 @@ export class GameFlowService {
       turnsPlayed
     });
 
-    console.log('🏆 Combat completed:', {
+    console.log('Combat completed:', {
       enemiesDefeated,
       damageDealt,
       damageTaken,

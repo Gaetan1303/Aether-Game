@@ -9,6 +9,12 @@ describe('AuthService', () => {
     service = TestBed.inject(AuthService);
   });
 
+  afterEach(() => {
+    // Nettoyer l'état entre les tests
+    service.logout();
+    localStorage.clear();
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

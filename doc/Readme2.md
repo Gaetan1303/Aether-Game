@@ -35,24 +35,24 @@ go build -o bin/demo cmd/demo/main.go
 #### A Supprimer Complètement
 
 1. **Event Sourcing distribué**
-   - ❌ `internal/combat/infrastructure/event_store_postgres.go` (248 lignes)
-   - ❌ `pkg/eventbus/kafka_publisher.go` (123 lignes)
-   - ❌ Toute la stack PostgreSQL/Kafka/Redis
-   - ✅ **Garder** : Events in-memory pour undo/replay local
+   - `internal/combat/infrastructure/event_store_postgres.go` (248 lignes)
+   - `pkg/eventbus/kafka_publisher.go` (123 lignes)
+   - Toute la stack PostgreSQL/Kafka/Redis
+   - **Garder** : Events in-memory pour undo/replay local
 
 2. **Patterns inutilisés** (7 sur 11)
-   - ❌ Observer Pattern (pas de subscribers)
-   - ❌ Chain of Responsibility (validation simple suffit)
-   - ❌ Factory Pattern pour DamageCalculator (injection directe)
-   - ❌ Command Pattern complexe (fonctions simples suffisent)
-   - ✅ **Garder** : Strategy (DamageCalculator), State Machine (états combat), Composition (Unite)
+   - Observer Pattern (pas de subscribers)
+   - Chain of Responsibility (validation simple suffit)
+   - Factory Pattern pour DamageCalculator (injection directe)
+   - Command Pattern complexe (fonctions simples suffisent)
+   - **Garder** : Strategy (DamageCalculator), State Machine (états combat), Composition (Unite)
 
 3. **Abstractions excessives**
-   - ❌ `StateMachineProvider` interface
-   - ❌ `CommandSystemProvider` interface
-   - ❌ `ObserverProvider` interface
-   - ❌ `ValidationProvider` interface
-   - ✅ **Garder** : Interfaces utiles (DamageCalculator, EventStore simplifié)
+   - `StateMachineProvider` interface
+   - `CommandSystemProvider` interface
+   - `ObserverProvider` interface
+   - `ValidationProvider` interface
+   - **Garder** : Interfaces utiles (DamageCalculator, EventStore simplifié)
 
 **Fichiers à supprimer :**
 ```bash

@@ -65,7 +65,7 @@ Permettre au joueur de créer un personnage unique et personnalisé dans un univ
 │  Quel est le sexe de votre          │
 │  personnage ?                       │
 │                                     │
-│  [♂️ Masculin]  [♀️ Féminin]  [⚧ Autre] │
+│  [Masculin]  [Féminin]  [Autre] │
 │                                     │
 │                                     │
 │  [← Précédent]      [Suivant →]    │
@@ -107,7 +107,7 @@ Permettre au joueur de créer un personnage unique et personnalisé dans un univ
 │                      │                          │
 │                      │  Yeux: ] #4169E1       │
 │                      │                          │
-│                      │  [🎲 Randomiser]          │
+│                      │  [Randomiser]          │
 │                                                   │
 │  [← Précédent]              [Suivant →]          │
 └───────────────────────────────────────────────────┘

@@ -228,7 +228,7 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   private handleCombatEnded(event: any): void {
-    console.log('🎯 Combat terminé:', event);
+    console.log('Combat terminé:', event);
     
     // Afficher l'écran de fin de combat
     this.isCombatActive.set(false);
@@ -243,7 +243,7 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
     
     // Vérifier si le joueur a gagné
     if (result.winner === 'player') {
-      console.log('🏆 Victoire du joueur ! Déclenchement du flux de victoire...');
+      console.log('Victoire du joueur ! Déclenchement du flux de victoire...');
       
       // Extraire les statistiques de combat
       const enemiesDefeated = event.statistics?.enemiesDefeated || 3;

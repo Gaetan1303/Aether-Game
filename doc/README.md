@@ -6,38 +6,38 @@
 
 **Aether Engine** est un moteur de combat tactique inspiré de *Final Fantasy Tactics Advance*, avec architecture Domain-Driven Design (DDD) et 190 tests automatisés.
 
-## 🎮 Démos Jouables
+## Démos Jouables
 
-### 🎯 Démo Simple - Découverte (2v2)
+### Démo Simple - Découverte (2v2)
 
 ```bash
 ./start-demo.sh
 ```
 
 **Combat 2 Héros vs 2 Gobelins** - Parfait pour découvrir :
-- ⚔️ Attaques physiques et magiques
-- ✨ Compétences avec MP et cooldowns
-- 🎲 **Système ATH** (chances de toucher)
-- 📍 Déplacement tactique sur grille 8x8
-- 🤖 IA ennemie fonctionnelle
+- Attaques physiques et magiques
+- Compétences avec MP et cooldowns
+- **Système ATH** (chances de toucher)
+- Déplacement tactique sur grille 8x8
+- IA ennemie fonctionnelle
 
-**[📖 Guide complet](cmd/demo/README.md)**
+**[Guide complet](cmd/demo/README.md)**
 
-### 🏰 Démo Avancée - Combat Épique (3v3)
+### Démo Avancée - Combat Épique (3v3)
 
 ```bash
 ./start-demo-advanced.sh
 ```
 
 **Combat 3 Héros vs 3 Gobelins** - Toutes les features ! 🔥
-- 👥 **6 unités uniques** (Paladin, Archer, Mage vs Chef, Berserker, Shaman)
-- 🎯 **5+ compétences** variées (Provocation, Tir Précision, Boule de Feu, Éclair...)
-- 📊 **Statistiques complètes** (précision, dégâts, MVP)
-- 🤖 **IA intelligente** (priorisation des cibles faibles)
-- 🎨 **Interface épique** avec barres HP colorées
-- 🎲 **Système ATH amélioré** avec jets de dés visibles
+- **6 unités uniques** (Paladin, Archer, Mage vs Chef, Berserker, Shaman)
+- **5+ compétences** variées (Provocation, Tir Précision, Boule de Feu, Éclair...)
+- **Statistiques complètes** (précision, dégâts, MVP)
+- **IA intelligente** (priorisation des cibles faibles)
+- **Interface épique** avec barres HP colorées
+- **Système ATH amélioré** avec jets de dés visibles
 
-**[📖 Guide complet](cmd/demo-advanced/README.md)** | **[🎉 Présentation détaillée](DEMO_AVANCEE.md)**
+**[Guide complet](cmd/demo-advanced/README.md)** | **[Présentation détaillée](DEMO_AVANCEE.md)**
 
 ---
 

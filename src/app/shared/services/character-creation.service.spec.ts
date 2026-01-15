@@ -49,7 +49,4 @@ describe('CharacterCreationService', () => {
     expect(character.nom).toBeDefined();
     expect(character.apparence).toBeDefined();
   });
-    
-    expect(service.currentState.characterData.nom).toBe('TestHero');
-  });
 });

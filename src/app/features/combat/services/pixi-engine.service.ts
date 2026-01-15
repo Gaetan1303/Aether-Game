@@ -32,11 +32,7 @@ export class PixiEngineService {
     try {
       this.app = new PIXI.Application();
       
-      const finalConfig = {
-        ...this.DEFAULT_CONFIG,
-        ...config,
-        canvas
-      };
+      const finalConfig = this.buildConfiguration(canvas, config);
 
       await this.app.init(finalConfig);
       
@@ -51,6 +47,17 @@ export class PixiEngineService {
       console.error('Failed to initialize PixiEngine:', error);
       throw error;
     }
+  }
+
+  /**
+   * Builder Pattern: Construction de la configuration
+   */
+  private buildConfiguration(canvas: HTMLCanvasElement, userConfig?: Partial<PIXI.ApplicationOptions>): PIXI.ApplicationOptions {
+    return {
+      ...this.DEFAULT_CONFIG,
+      ...userConfig,
+      canvas
+    } as PIXI.ApplicationOptions;
   }
 
   private setupLayers(): void {

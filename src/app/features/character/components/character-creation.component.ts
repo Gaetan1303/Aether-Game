@@ -135,7 +135,8 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       if (!characterData) {
         throw new Error('Données de personnage incomplètes');
       }
-✨ Création du personnage:', characterData);
+
+      console.log('Création du personnage:', characterData);
 
       // Créer le personnage via l'API
       let createdCharacter: JoueurResponseDTO | undefined;
@@ -143,7 +144,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         // Essayer l'endpoint RESTful en premier
         createdCharacter = await this.apiService.createCharacter(characterData).toPromise();
       } catch (error) {
-        console.log('⚠️ Fallback vers l\'endpoint legacy');
+        console.log('Fallback vers l\'endpoint legacy');
         // Fallback vers l'endpoint legacy
         createdCharacter = await this.apiService.createCharacterLegacy(characterData).toPromise();
       }
@@ -152,7 +153,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         throw new Error('Impossible de créer le personnage');
       }
 
-      console.log('✅ Personnage créé:', createdCharacter);
+      console.log('Personnage créé:', createdCharacter);
 
       // Démarrer une nouvelle session de jeu avec GameFlowService
       this.gameFlowService.startNewSession(
@@ -161,10 +162,9 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       );
 
       // GameFlowService va gérer la navigation automatiquement vers /story
-      });
 
     } catch (error: any) {
-      console.error('❌ Erreur lors de la création:', error);
+      console.error('Erreur lors de la création:', error);
       this.creationService.setError(error.message || 'Erreur lors de la création du personnage');
     } finally {
       this.creationService.setLoading(false);

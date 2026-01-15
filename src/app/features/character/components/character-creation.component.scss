@@ -161,6 +161,10 @@
   padding-bottom: 120px;
   overflow-y: auto;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 // Container du contenu principal
@@ -170,6 +174,16 @@
   flex-direction: column;
   min-height: calc(100vh - 80px);
   overflow-y: auto;
+}
+
+// Container du contenu des étapes avec padding additionnel
+.creation-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  flex: 1;
 }
 
 // --- Page finale avec bouton héro ---
@@ -184,6 +198,9 @@
   flex-direction: column;
   align-items: center;
   gap: 25px;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  border: 2px solid rgba(#ffd700, 0.3);
   background: linear-gradient(
     135deg,
     rgba(#ffd700, 0.15) 0%,
@@ -193,6 +210,8 @@
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  margin-bottom: 2rem;
 
   &::before {
     content: '';
@@ -250,6 +269,9 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  padding: 1.5rem 3rem;
+  border: none;
+  border-radius: 12px;
   background: linear-gradient(
     135deg,
     #00d4aa 0%,
@@ -262,6 +284,7 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 212, 170, 0.4);
   
   &::before {
     content: '';

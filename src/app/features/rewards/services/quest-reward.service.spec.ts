@@ -21,10 +21,9 @@ describe('QuestRewardService', () => {
     it('should prepare rewards', () => {
       const reward = createFirstQuestReward();
       const stats: CombatStatistics = {
-        turnsCount: 5,
+        turnsPlayed: 5,
         damageDealt: 150,
         damageTaken: 30,
-        unitsLost: 0,
         healingDone: 0,
         accuracy: 80,
         criticalHits: 1,
@@ -43,10 +42,9 @@ describe('QuestRewardService', () => {
     it('should calculate total XP with bonus', () => {
       const reward = createFirstQuestReward();
       const stats: CombatStatistics = {
-        turnsCount: 3,
+        turnsPlayed: 3,
         damageDealt: 200,
         damageTaken: 10,
-        unitsLost: 0,
         healingDone: 0,
         accuracy: 95,
         criticalHits: 5,
@@ -66,10 +64,9 @@ describe('QuestRewardService', () => {
     it('should apply rewards to player', () => {
       const reward = createFirstQuestReward();
       const stats: CombatStatistics = {
-        turnsCount: 5,
+        turnsPlayed: 5,
         damageDealt: 150,
         damageTaken: 30,
-        unitsLost: 0,
         healingDone: 0,
         accuracy: 80,
         criticalHits: 1,
