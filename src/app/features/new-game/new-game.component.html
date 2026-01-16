@@ -59,7 +59,7 @@
       <div class="skills-preview">
         <div class="skills-header">Compétences</div>
         <div class="selected-skills">
-          @for (skill of selectedSkills(); track skill) {
+          @for (skill of selectedSkills(); track $index) {
             <span class="skill-badge">{{ skill }}</span>
           }
           @if (selectedSkills().length === 0) {
@@ -108,7 +108,7 @@
             <div class="customization-group">
               <label>Race</label>
               <div class="option-buttons">
-                @for (race of races; track race) {
+                @for (race of races; track $index) {
                   <button 
                     class="ff-btn" 
                     [class.primary]="selectedRace() === race"
@@ -123,7 +123,7 @@
             <div class="customization-group">
               <label>Genre</label>
               <div class="option-buttons">
-                @for (gender of sexes; track gender) {
+                @for (gender of sexes; track $index) {
                   <button 
                     class="ff-btn" 
                     [class.primary]="selectedGender() === gender"
@@ -188,7 +188,7 @@
           <div class="customization-group">
             <label>Style de Cheveux</label>
             <div class="option-buttons">
-              @for (style of hairStyles; track style) {
+              @for (style of hairStyles; track $index) {
                 <button 
                   class="ff-btn"
                   [class.primary]="hairStyle() === style"
@@ -205,7 +205,7 @@
             <div class="customization-group">
               <label>Style de Barbe</label>
               <div class="option-buttons">
-                @for (beard of beardStyles; track beard) {
+                @for (beard of beardStyles; track $index) {
                   <button 
                     class="ff-btn"
                     [class.primary]="beardStyle() === beard"
@@ -236,10 +236,10 @@
           <div class="customization-group">
             <label>Classe Initiale</label>
             @if (isLoading()) {
-              <div class="loading">⏳ Chargement des classes...</div>
+              <div class="loading">Chargement des classes...</div>
             } @else {
               <div class="class-grid">
-                @for (job of displayClasses(); track job) {
+                @for (job of displayClasses(); track $index) {
                   <div class="class-card" 
                        [class.selected]="selectedClass() === job"
                        (click)="selectedClass.set(job)">
@@ -264,7 +264,7 @@
           <div class="customization-group">
             <label>Compétences Initiales (Maximum 3)</label>
             <div class="skills-selection">
-              @for (skill of availableSkills(); track skill) {
+              @for (skill of availableSkills(); track $index) {
                 <button 
                   class="skill-button"
                   [class.selected]="selectedSkills().includes(skill)"
@@ -293,7 +293,7 @@
           <div class="customization-group">
             <label>Divinité Protectrice</label>
             <div class="gods-grid">
-              @for (god of gods; track god) {
+              @for (god of gods; track $index) {
                 <button 
                   class="god-button ff-btn"
                   [class.primary]="selectedGod() === god"
@@ -309,7 +309,7 @@
           <div class="customization-group">
             <label>Alignement Moral</label>
             <div class="alignment-grid">
-              @for (alignment of alignments; track alignment) {
+              @for (alignment of alignments; track $index) {
                 <button 
                   class="alignment-button"
                   [class.selected]="selectedAlignment() === alignment"

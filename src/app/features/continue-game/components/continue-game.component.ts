@@ -101,7 +101,7 @@ interface SavedCharacter {
 
         <!-- Message d'erreur -->
         <div class="error-message" *ngIf="errorMessage">
-          <div class="error-icon">⚠️</div>
+          <div class="error-icon">!</div>
           <p>{{ errorMessage }}</p>
           <button class="btn-retry" (click)="onRetry()">
             Réessayer

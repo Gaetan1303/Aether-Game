@@ -131,7 +131,7 @@ export class GameFlowService {
     // Naviguer vers le combat
     this.router.navigate(['/combat']);
     
-    console.log('⚔️ Combat started');
+    console.log('Combat started');
   }
 
   /**
@@ -310,7 +310,7 @@ export class GameFlowService {
     this.currentSession.set(session);
     this.currentPhase.set(session.currentPhase);
     
-    console.log('▶️ Resuming session:', session);
+    console.log('Resuming session:', session);
     
     // Naviguer vers la phase appropriée
     switch (session.currentPhase) {

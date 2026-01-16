@@ -48,10 +48,12 @@ export class SpriteManagerService {
    */
   async initialize(textureUrls: Record<string, string>): Promise<void> {
     try {
-      // Charger toutes les textures
+      // Charger toutes les textures qui ont une URL valide
       for (const [key, url] of Object.entries(textureUrls)) {
-        const texture = await PIXI.Assets.load(url);
-        this.textures.set(key, texture);
+        if (url && url.trim() !== '') {
+          const texture = await PIXI.Assets.load(url);
+          this.textures.set(key, texture);
+        }
       }
       
       console.log(`SpriteManager initialized with ${this.textures.size} textures`);
@@ -61,6 +63,14 @@ export class SpriteManagerService {
       console.error('Failed to initialize SpriteManager:', error);
       throw error;
     }
+  }
+
+  /**
+   * Enregistre une texture générée programmatiquement
+   */
+  registerTexture(key: string, texture: PIXI.Texture): void {
+    this.textures.set(key, texture);
+    console.log(`Texture '${key}' registered`);
   }
 
   /**

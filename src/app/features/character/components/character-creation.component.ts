@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, Subject, takeUntil, combineLatest } from 'rxjs';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { CharacterCreationService } from '../../../shared/services/character-creation.service';
 import { AetherApiService } from '../../../shared/services/aether-api.service';
 import { GameFlowService } from '../../../core/services/game-flow.service';
 import { 
   CharacterCreationState, 
   CharacterCreationStep,
+  CharacterCreationDTO,
   JoueurResponseDTO
 } from '../../../shared/interfaces/character-creation.interface';
 
@@ -30,7 +32,18 @@ import { SummaryStepComponent } from './steps/summary-step.component';
     SummaryStepComponent
   ],
   templateUrl: './character-creation.component.html',
-  styleUrls: ['./character-creation.component.scss']
+  styleUrls: ['./character-creation.component.scss'],
+  animations: [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(-20px)' }))
+      ])
+    ])
+  ]
 })
 export class CharacterCreationComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -206,6 +219,35 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
    */
   getProgress(currentStep: number): number {
     return Math.round((currentStep / 5) * 100);
+  }
+
+  /**
+   * Obtenir l'emoji avatar basé sur le personnage
+   */
+  getAvatarEmoji(characterData: CharacterCreationDTO): string {
+    const jobEmojis: Record<string, string> = {
+      'Guerrier': '',
+      'Mage': '🧙',
+      'Archer': '🏹',
+      'Voleur': '',
+      'Prêtre': '✨',
+      'Paladin': '',
+      'Chevalier': '🐴',
+      'Berserker': '💢'
+    };
+
+    if (characterData.job_initial) {
+      return jobEmojis[characterData.job_initial] || '👤';
+    }
+
+    // Emoji par défaut basé sur le sexe
+    if (characterData.sexe === 'male') {
+      return '🧑';
+    } else if (characterData.sexe === 'female') {
+      return '👩';
+    }
+
+    return '👤';
   }
 
   // Ajout de la fonction trackBy pour optimiser *ngFor

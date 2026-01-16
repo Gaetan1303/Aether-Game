@@ -17,8 +17,8 @@ import {
 })
 export class AetherApiService {
   private http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:8080/aether/v1'; // Correction : retour à la version 1 de l'API
-  private readonly systemUrl = 'http://localhost:8080';
+  private readonly baseUrl = '/aether/v1'; // Utilisation du proxy configuré
+  private readonly systemUrl = '';
 
   // États réactifs
   private isConnectedSubject = new BehaviorSubject<boolean>(false);
@@ -34,7 +34,7 @@ export class AetherApiService {
    * Vérifier l'état du serveur
    */
   ping(): Observable<{ message: string }> {
-    return this.http.get<{ message: string }>(`${this.systemUrl}/ping`)
+    return this.http.get<{ message: string }>(`/ping`)
       .pipe(
         tap(() => this.isConnectedSubject.next(true)),
         catchError(error => {
@@ -89,9 +89,13 @@ export class AetherApiService {
 
   /**
    * Créer un nouveau personnage (RESTful)
+   * Note: Le backend requiert un trailing slash sur /joueurs/
    */
   createJoueur(joueurData: JoueurCreateDTO): Observable<JoueurResponseDTO> {
-    return this.http.post<JoueurResponseDTO>(`${this.baseUrl}/joueurs`, joueurData)
+    return this.http.post<JoueurResponseDTO>(`${this.baseUrl}/joueurs/`, joueurData, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    })
       .pipe(
         catchError(this.handleError)
       );
@@ -101,7 +105,10 @@ export class AetherApiService {
    * Créer un nouveau personnage (Legacy - mais fonctionnel)
    */
   createJoueurLegacy(joueurData: JoueurCreateDTO): Observable<JoueurResponseDTO> {
-    return this.http.post<JoueurResponseDTO>(`${this.baseUrl}/joueurs/create`, joueurData)
+    return this.http.post<JoueurResponseDTO>(`${this.baseUrl}/joueurs/create`, joueurData, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'json'
+    })
       .pipe(
         catchError(this.handleError)
       );
@@ -218,15 +225,34 @@ export class AetherApiService {
   private handleError = (error: HttpErrorResponse) => {
     let errorMessage = 'Une erreur inattendue s\'est produite';
     
+    // Logger la réponse complète pour debug
+    console.error('Réponse d\'erreur complète:', {
+      status: error.status,
+      statusText: error.statusText,
+      errorBody: error.error,
+      errorBodyStringified: JSON.stringify(error.error, null, 2),
+      headers: error.headers,
+      url: error.url
+    });
+    
     if (error.error instanceof ErrorEvent) {
       // Erreur côté client
       errorMessage = `Erreur client: ${error.error.message}`;
+    } else if (error.error instanceof ProgressEvent) {
+      // Erreur de parsing (réponse non-JSON)
+      errorMessage = 'Le serveur a renvoyé une réponse invalide (non-JSON). Vérifiez que le backend renvoie du JSON.';
     } else {
       // Erreur côté serveur
       if (error.status === 0) {
         errorMessage = 'Impossible de joindre le serveur Aether. Vérifiez votre connexion.';
       } else if (error.status === 400) {
-        errorMessage = error.error?.error || 'Données invalides';
+        // Pour les 400, essayer d'extraire le message détaillé du backend
+        if (error.error?.details) {
+          errorMessage = error.error.details;
+        } else {
+          const backendMessage = error.error?.message || error.error?.error || error.error;
+          errorMessage = typeof backendMessage === 'string' ? backendMessage : 'Données invalides';
+        }
       } else if (error.status === 404) {
         errorMessage = 'Ressource non trouvée';
       } else if (error.status === 409) {

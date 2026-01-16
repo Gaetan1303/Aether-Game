@@ -1,6 +1,6 @@
 import { Component, signal, computed, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AetherApiService } from '../../shared/services/aether-api.service';
 
@@ -14,6 +14,7 @@ import { AetherApiService } from '../../shared/services/aether-api.service';
 })
 export class NewGameComponent implements OnInit {
   private aetherApi = inject(AetherApiService);
+  private router = inject(Router);
   
   // Signaux pour la connexion API
   isLoading = signal<boolean>(false);
@@ -211,6 +212,8 @@ export class NewGameComponent implements OnInit {
     
     const jobInitial = classMap[this.selectedClass()] || 'guerrier';
     
+    // Construire les données selon le schéma JoueurCreateDTO de l'API
+    // L'API requiert uniquement: nom, apparence, job_initial
     const joueurData = {
       nom: this.characterName().trim(),
       apparence: {
@@ -219,41 +222,49 @@ export class NewGameComponent implements OnInit {
         couleur_peau: this.skinColor(),
         couleur_cheveux: this.hairColor(),
         couleur_yeux: this.eyeColor(),
-        style_cheveux: this.hairStyle(),
-        style_barbe: this.beardStyle()
+        style_cheveux: this.hairStyle() || 'Court',
+        style_barbe: this.beardStyle() || ''
       },
-      job_initial: jobInitial,
-      competences_initiales: this.selectedSkills(),
-      divinite: this.selectedGod(),
-      alignement: this.selectedAlignment(),
-      difficulte: this.difficulty().toLowerCase()
+      job_initial: jobInitial
     };
+    
+    console.log('Envoi des données joueur:', JSON.stringify(joueurData, null, 2));
     
     this.isLoading.set(true);
     this.apiError.set('');
     
-    // Essayer d'abord l'endpoint RESTful, puis le legacy
+    // Essayer l'endpoint RESTful principal
     this.aetherApi.createJoueur(joueurData).subscribe({
       next: (response) => {
         this.isLoading.set(false);
         console.log('Personnage créé avec succès:', response);
-        // Rediriger vers une page de succès ou le jeu
-        alert(`Personnage "${response.nom}" créé avec succès !`);
+        // Lancer automatiquement le premier combat (démo)
+        this.startDemoGame(response);
       },
       error: (error) => {
-        // Essayer l'endpoint legacy en cas d'échec
-        this.aetherApi.createJoueurLegacy(joueurData).subscribe({
-          next: (response) => {
-            this.isLoading.set(false);
-            console.log('Personnage créé avec succès (legacy):', response);
-            alert(`Personnage "${response.nom}" créé avec succès !`);
-          },
-          error: (legacyError) => {
-            this.isLoading.set(false);
-            this.apiError.set('Erreur lors de la création du personnage');
-            console.error('Erreur création personnage:', error, legacyError);
-          }
-        });
+        this.isLoading.set(false);
+        this.apiError.set('Erreur lors de la création du personnage: ' + error.message);
+        console.error('Erreur création personnage:', error);
+      }
+    });
+  }
+  
+  /**
+   * Lancer la démo du jeu après création du personnage
+   */
+  private startDemoGame(joueur: any) {
+    console.log('Lancement de la démo pour:', joueur.nom);
+    
+    // Sauvegarder l'ID du joueur dans le localStorage pour l'utiliser dans les autres composants
+    localStorage.setItem('currentPlayerId', joueur.id);
+    localStorage.setItem('currentPlayerName', joueur.nom);
+    
+    // Rediriger vers la narration d'introduction (selon le MVP)
+    // La narration redirigera ensuite vers le combat
+    this.router.navigate(['/story'], {
+      queryParams: {
+        playerId: joueur.id,
+        scene: 'introduction'
       }
     });
   }

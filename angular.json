@@ -67,6 +67,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "aether-engine-client:build:production"
@@ -109,6 +112,5 @@
   },
   "cli": {
     "analytics": false
-  },
-  "proxyConfig": "proxy.conf.json"
+  }
 }

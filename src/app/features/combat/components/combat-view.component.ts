@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, signal, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import * as PIXI from 'pixi.js';
 import { PixiEngineService } from '../services/pixi-engine.service';
 import { IsoRendererService } from '../services/iso-renderer.service';
 import { SpriteManagerService } from '../services/sprite-manager.service';
@@ -114,13 +115,8 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   private async initializeServices(): Promise<void> {
-    // Initialiser le gestionnaire de sprites avec des textures de test
-    const testTextures = {
-      grass_tile: '',
-      unit_sprite: ''
-    };
-    
-    await this.spriteManager.initialize(testTextures);
+    // Créer des textures procédurales de fallback (pas besoin de fichiers externes)
+    await this.createFallbackTextures();
     
     // Créer des pools de sprites
     this.spriteManager.createPool({
@@ -154,6 +150,45 @@ export class CombatViewComponent implements OnInit, AfterViewInit, OnDestroy {
     
     // Démarrer les statistiques
     this.startStatsTracking();
+  }
+  
+  /**
+   * Créer des textures procédurales pour le combat (fallback si pas d'assets)
+   */
+  private async createFallbackTextures(): Promise<void> {
+    const app = this.pixiEngine.getApp();
+    if (!app) return;
+    
+    // Créer une texture de tuile d'herbe (isométrique)
+    const grassGraphics = new PIXI.Graphics();
+    grassGraphics.beginFill(0x4a7c59); // Vert herbe
+    grassGraphics.lineStyle(1, 0x3d6b4a);
+    // Forme isométrique (losange)
+    grassGraphics.moveTo(32, 0);
+    grassGraphics.lineTo(64, 16);
+    grassGraphics.lineTo(32, 32);
+    grassGraphics.lineTo(0, 16);
+    grassGraphics.closePath();
+    grassGraphics.endFill();
+    
+    const grassTexture = app.renderer.generateTexture(grassGraphics);
+    this.spriteManager.registerTexture('grass_tile', grassTexture);
+    
+    // Créer une texture d'unité (cercle simple)
+    const unitGraphics = new PIXI.Graphics();
+    unitGraphics.beginFill(0x3498db); // Bleu
+    unitGraphics.lineStyle(2, 0x2980b9);
+    unitGraphics.drawCircle(16, 16, 14);
+    unitGraphics.endFill();
+    // Ajouter une petite ombre
+    unitGraphics.beginFill(0x000000, 0.3);
+    unitGraphics.drawEllipse(16, 30, 12, 4);
+    unitGraphics.endFill();
+    
+    const unitTexture = app.renderer.generateTexture(unitGraphics);
+    this.spriteManager.registerTexture('unit_sprite', unitTexture);
+    
+    console.log('Fallback textures created successfully');
   }
   
   private setupWebSocketConnection(): void {

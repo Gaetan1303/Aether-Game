@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { StoryService } from '../services/story.service';
-import { DialogNode } from '../models/story.models';
+import { DialogNode, Story } from '../models/story.models';
 
 @Component({
   selector: 'app-story-dialog',
@@ -14,6 +14,7 @@ import { DialogNode } from '../models/story.models';
 export class StoryDialogComponent implements OnInit, OnDestroy {
   storyService = inject(StoryService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   // Signaux locaux
   isTextAnimating = signal<boolean>(false);
@@ -36,11 +37,58 @@ export class StoryDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log('StoryDialogComponent initialized');
     
+    // Vérifier si une histoire est déjà en cours
+    if (!this.isPlaying()) {
+      // Charger l'histoire d'introduction par défaut
+      this.loadIntroductionStory();
+    }
+    
     // Observer les changements de nœud pour animer le texte
     const node = this.currentNode();
     if (node) {
       this.startTextAnimation(node.text);
     }
+  }
+  
+  /**
+   * Charger l'histoire d'introduction (démo MVP)
+   */
+  private loadIntroductionStory(): void {
+    const playerName = localStorage.getItem('currentPlayerName') || 'Aventurier';
+    
+    const introStory: Story = {
+      id: 'intro_tutorial',
+      title: 'Le Début de l\'Aventure',
+      description: 'Introduction au monde d\'Aether',
+      initialNodeId: 'intro_01',
+      nodes: [
+        {
+          id: 'intro_01',
+          text: `Bienvenue dans le monde d'Aether, ${playerName}. Votre légende commence aujourd'hui...`,
+          speaker: 'Narrateur',
+          position: 'center',
+          nextNodeId: 'intro_02'
+        },
+        {
+          id: 'intro_02',
+          text: 'Les ténèbres menacent le royaume. Les anciens dieux ont appelé des héros pour repousser cette menace.',
+          speaker: 'Narrateur',
+          position: 'center',
+          nextNodeId: 'intro_03'
+        },
+        {
+          id: 'intro_03',
+          text: `${playerName}, votre première épreuve vous attend. Prouvez votre valeur dans le champ de bataille !`,
+          speaker: 'Narrateur',
+          position: 'center'
+        }
+      ],
+      onComplete: () => {
+        console.log('Histoire d\'introduction terminée');
+      }
+    };
+    
+    this.storyService.startStory(introStory);
   }
 
   ngOnDestroy(): void {
